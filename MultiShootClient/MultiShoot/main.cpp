@@ -1,5 +1,4 @@
 #include "LobbyScene.hpp"
-#include <Windows.h>
 #include "TVDR.hpp"
 
 int main(int argc, char* args[]) {
