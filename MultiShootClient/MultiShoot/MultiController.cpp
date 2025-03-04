@@ -15,6 +15,7 @@ MultiController::~MultiController() {
 }
 
 void MultiController::Update() {
+
 	PacketType* packet;
 	if (_tool.dataQ.pop(&packet)) {
 		if (packet == nullptr)
