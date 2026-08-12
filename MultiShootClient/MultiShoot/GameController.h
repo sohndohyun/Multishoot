@@ -93,7 +93,7 @@ public:
 
 	PacketType* Pop();
 	static void DeletePacket(PacketType* pt);
-	static PacketType* CreatePacket(char* data);
+	static PacketType* CreatePacket(char* data, int size);
 
 	virtual ~GameController();
 };

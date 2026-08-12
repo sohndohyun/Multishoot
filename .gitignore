@@ -349,4 +349,5 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-*.xml
+# Local player preferences generated at runtime
+/MultiShootClient/MultiShoot/PlayerPref.xml

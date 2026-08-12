@@ -1,4 +1,5 @@
 #include "RingBuffer.h"
+#include <cstring>
 
 RingBuffer::RingBuffer()
 {

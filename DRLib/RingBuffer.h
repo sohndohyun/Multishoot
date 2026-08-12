@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <WinSock2.h>
 
 class RingBuffer
@@ -6,8 +6,8 @@ class RingBuffer
 public:
 	enum e_AYA_STREAM_SQ
 	{
-		eBUFFER_DEFAULT = 20960,		// ¹öÆÛÀÇ ±âº» Å©±â.
-		eBUFFER_BLANK = 8				// È®½ÇÇÑ ±¸ºĞÀ» À§ÇØ 8Byte ÀÇ ºó°ø°£.
+		eBUFFER_DEFAULT = 20960,		// ë²„í¼ì˜ ê¸°ë³¸ í¬ê¸°.
+		eBUFFER_BLANK = 8				// í™•ì‹¤í•œ êµ¬ë¶„ì„ ìœ„í•´ 8Byte ì˜ ë¹ˆê³µê°„.
 	};
 
 public:

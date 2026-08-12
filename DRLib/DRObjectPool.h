@@ -10,22 +10,16 @@ public:
 	~DRObjectPool() 
 	{ 
 		T* temp;
-		while (GetSize())
-		{
-			base::pop(&temp);
+		while (base::pop(&temp))
 			delete temp;
-		}
 	}
 
 public:
 	T* Alloc()
 	{
-		if (base::size() > 0)
-		{
-			T* temp;
-			base::pop(&temp);
+		T* temp;
+		if (base::pop(&temp))
 			return temp;
-		}
 		return new T;
 	}
 

@@ -1,5 +1,5 @@
-#include "stdafx.h"
 #include "DRPacket.h"
+#include <cstring>
 
 DRPacket::DRPacket()
 { 
@@ -15,21 +15,13 @@ void DRPacket::init()
 
 bool DRPacket::put(char* data, int size)
 {
+	if (data == nullptr || size < 0)
+		return false;
 	if (pPut - buffer + size > BUFSIZ)
 		return false;
 
 	memcpy(pPut, data, size);
 	pPut += size;
-	return true;
-}
-
-bool DRPacket::call(char* data, int size)
-{
-	if (pPut - pCall < size)
-		return false;
-
-	memcpy(data, pCall, size);
-	pCall += size;
 	return true;
 }
 
@@ -52,6 +44,18 @@ bool DRPacket::putPacket(char* data, int size)
 	return true;
 }
 
+bool DRPacket::call(char* data, int size)
+{
+	if (data == nullptr || size < 0)
+		return false;
+	if (pPut - pCall < size)
+		return false;
+
+	memcpy(data, pCall, size);
+	pCall += size;
+	return true;
+}
+
 DRPacket::Header* DRPacket::header()
 {
 	return head;
@@ -59,7 +63,7 @@ DRPacket::Header* DRPacket::header()
 
 int DRPacket::size()
 {
-	return pPut - pCall;
+	return static_cast<int>(pPut - pCall);
 }
 
 bool DRPacket::movep(int size)

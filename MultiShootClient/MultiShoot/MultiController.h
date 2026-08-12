@@ -12,7 +12,7 @@ public:
 
 	virtual void ChangeDir(Tvdr::Vector dir, Uint32 id);
 	virtual void Shoot(Uint32 id);
-	virtual bool Work() { return _work; }
+	virtual bool Work() { return _work && _tool.work(); }
 
 private:
 	MultiShootClient _tool;

@@ -17,6 +17,9 @@ PacketType* GameController::Pop() {
 }
 
 void GameController::DeletePacket(PacketType* packet) {
+	if (packet == nullptr)
+		return;
+
 	switch (*packet) {
 	case PacketType::CHANGE_DIR_REQ:
 	{
@@ -81,11 +84,15 @@ void GameController::DeletePacket(PacketType* packet) {
 	}
 }
 
-PacketType* GameController::CreatePacket(char* data) {
+PacketType* GameController::CreatePacket(char* data, int size) {
+	if (data == nullptr || size < sizeof(PacketType))
+		return nullptr;
+
 	PacketType* packet = (PacketType*)data;
 	switch (*packet) {
 	case PacketType::LOGIN_RES:
 	{
+		if (size != sizeof(LoginRes)) return nullptr;
 		LoginRes* res = (LoginRes*)data;
 		auto rt = new LoginRes;
 		rt->playerID = res->playerID;
@@ -94,36 +101,43 @@ PacketType* GameController::CreatePacket(char* data) {
 	}
 	case PacketType::PLAYER_SPAWN_RES:
 	{
+		if (size != sizeof(PlayerSpawnRes)) return nullptr;
 		PlayerSpawnRes* res = (PlayerSpawnRes*)packet;
 		return (PacketType*)(new PlayerSpawnRes(*res));
 	}
 	case PacketType::CHANGE_DIR_RES:
 	{
+		if (size != sizeof(ChangeDirRes)) return nullptr;
 		ChangeDirRes* res = (ChangeDirRes*)packet;
 		return (PacketType*)(new ChangeDirRes(*res));
 	}
 	case PacketType::MONSTER_SPAWN_RES:
 	{
+		if (size != sizeof(MonsterSpawnRes)) return nullptr;
 		MonsterSpawnRes* res = (MonsterSpawnRes*)packet;
 		return (PacketType*)(new MonsterSpawnRes(*res));
 	}
 	case PacketType::SHOOT_RES:
 	{
+		if (size != sizeof(ShootRes)) return nullptr;
 		ShootRes* res = (ShootRes*)packet;
 		return (PacketType*)(new ShootRes(*res));
 	}
 	case PacketType::PLAYER_HIT_RES:
 	{
+		if (size != sizeof(PlayerHitRes)) return nullptr;
 		PlayerHitRes* res = (PlayerHitRes*)packet;
 		return (PacketType*)(new PlayerHitRes(*res));
 	}
 	case PacketType::MONSTER_HIT_RES:
 	{
+		if (size != sizeof(MonsterHitRes)) return nullptr;
 		MonsterHitRes* res = (MonsterHitRes*)packet;
 		return (PacketType*)(new MonsterHitRes(*res));
 	}
 	case PacketType::GAME_END_RES:
 	{
+		if (size != sizeof(GameEndRes)) return nullptr;
 		GameEndRes* res = (GameEndRes*)packet;
 		return (PacketType*)(new GameEndRes(*res));
 	}

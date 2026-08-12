@@ -2,241 +2,404 @@
 #include <stdio.h>
 #include "DRClient.h"
 #include <process.h>
-#include "DRPacket.h"
 #include <ws2tcpip.h>
-#include <iostream>
 
 DRClient::DRClient()
+    : isInitialize(false), wsaStarted(false), port(0), iocp(NULL),
+      sock(INVALID_SOCKET), running(false), connected(false), socketOpen(false),
+	  pendingIo(0), allIoDone(NULL), sendThread(NULL), callbackThread(NULL)
 {
-	iocp = 0;
-	memset(&addr, 0, sizeof(addr));
-	port = 0;
-	sock = INVALID_SOCKET;
+    memset(&addr, 0, sizeof(addr));
+    ioThread[0] = ioThread[1] = NULL;
+}
 
-
-	isInitialize = false;
+DRClient::~DRClient()
+{
+    end();
 }
 
 int DRClient::init(const char* ip, int port)
 {
-	if (isInitialize == true)
-	{
-		return 1;
-	}
+    if (isInitialize)
+        return 1;
 
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+        return 2;
+    wsaStarted = true;
 
-	WSADATA wsaData;
+    iocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+    allIoDone = CreateEvent(NULL, TRUE, TRUE, NULL);
+    if (iocp == NULL || allIoDone == NULL)
+    {
+        end();
+        return 3;
+    }
 
-	this->port = port;
+    sock = WSASocket(PF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+    if (sock == INVALID_SOCKET)
+    {
+        end();
+        return 4;
+    }
+	 socketOpen.store(true);
 
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-		return 2;
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_family = AF_INET;
+    if (inet_pton(AF_INET, ip, &addr.sin_addr) != 1)
+    {
+        end();
+        return 5;
+    }
+    addr.sin_port = htons(port);
 
-	iocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-	sock = WSASocket(PF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
-	if (sock == INVALID_SOCKET)
-		return 3;
-
-	memset(&addr, 0, sizeof(addr));
-	addr.sin_family = AF_INET;
-	inet_pton(AF_INET, ip, &(addr.sin_addr));
-	addr.sin_port = htons(port);
-
-
-	isInitialize = true;
-	return 0;
+    this->port = port;
+    isInitialize = true;
+    return 0;
 }
 
 bool DRClient::start()
 {
-	if (isInitialize == false)
-		return false;
+    if (!isInitialize || running)
+        return false;
 
-	_endisFalse = true;
+    if (connect(sock, (SOCKADDR*)&addr, sizeof(addr)) == SOCKET_ERROR)
+        return false;
+    if (CreateIoCompletionPort((HANDLE)sock, iocp, (ULONG_PTR)sock, 0) == NULL)
+    {
+		if (socketOpen.exchange(false))
+			closesocket(sock);
+        sock = INVALID_SOCKET;
+        return false;
+    }
 
-	if (connect(sock, (SOCKADDR*)&addr, sizeof(addr)) == SOCKET_ERROR)
-	{
-		return false;
-	}
-	OnConnected();
+    running.store(true);
+    connected.store(true);
+    ioThread[0] = (HANDLE)_beginthreadex(NULL, 0, IOThreadMain, this, 0, NULL);
+    ioThread[1] = (HANDLE)_beginthreadex(NULL, 0, IOThreadMain, this, 0, NULL);
+    sendThread = (HANDLE)_beginthreadex(NULL, 0, SendThread, this, 0, NULL);
+    callbackThread = (HANDLE)_beginthreadex(NULL, 0, CallbackThread, this, 0, NULL);
+    if (ioThread[0] == NULL || ioThread[1] == NULL ||
+        sendThread == NULL || callbackThread == NULL)
+    {
+        end();
+        return false;
+    }
 
-	HANDLE h = CreateIoCompletionPort((HANDLE)sock, iocp, sock, 0);
-	ioThread[0] = (HANDLE)_beginthreadex(NULL, 0, IOThreadMain, (LPVOID)this, 0, NULL);
-	ioThread[1] = (HANDLE)_beginthreadex(NULL, 0, IOThreadMain, (LPVOID)this, 0, NULL);
-	sendThread = (HANDLE)_beginthreadex(NULL, 0, SendThread, (LPVOID)this, 0, NULL);
-	callbackThread = (HANDLE)_beginthreadex(NULL, 0, CallbackThread, (LPVOID)this, 0, NULL);
+    auto ioInfo = ioPool.Alloc();
+    BeginIo();
+    if (!PostRecv(ioInfo))
+    {
+        ioPool.Dealloc(ioInfo);
+        CompleteIo();
+        Disconnect();
+        end();
+        return false;
+    }
 
-	
-	DWORD flags = 0;
-	LPPER_IO_INFO ioInfo = ioPool.Alloc();
-	memset(&ioInfo->overlapped, 0, sizeof(OVERLAPPED));
-	ioInfo->wsabuf.len = BUFSIZ;
-	ioInfo->wsabuf.buf = ioInfo->buffer;
-	ioInfo->rwMode = IOtype::RECV;
-	WSARecv(sock, &ioInfo->wsabuf, 1, NULL, &flags, &ioInfo->overlapped, NULL);
-
-
-	return true;
+    OnConnected();
+    return true;
 }
 
 void DRClient::send_data(char* data, int size)
 {
-	auto packet = packetPool.Alloc();
-	packet->init();
-	packet->put(data, size);
-	packet->header()->size = size;
-	packet->header()->code = 12;
+    if (!running || !connected || data == nullptr ||
+        size < 0 || size > DRPacket::max_data_size())
+        return;
 
-	sendQ.push({ IOtype::SEND, packet->size(), packet });
+    auto packet = packetPool.Alloc();
+    packet->init();
+    if (!packet->put(data, size))
+    {
+        packetPool.Dealloc(packet);
+        return;
+    }
+    packet->header()->size = size;
+    packet->header()->code = DRPacket::CODE;
+    sendQ.push({ IOtype::SEND, packet->full_size(), packet });
 }
 
 void DRClient::wait()
 {
-	WaitForSingleObject(callbackThread, INFINITE);
+    if (callbackThread != NULL)
+        WaitForSingleObject(callbackThread, INFINITE);
 }
 
-void DRClient::end() {
-	_endisFalse = false;
-	closesocket(sock);
-	WSACleanup();
+void DRClient::end()
+{
+    running.store(false);
+    Disconnect();
+
+    if (sendThread != NULL)
+    {
+        WaitForSingleObject(sendThread, INFINITE);
+        CloseHandle(sendThread);
+        sendThread = NULL;
+    }
+
+    if (allIoDone != NULL)
+        WaitForSingleObject(allIoDone, INFINITE);
+
+    if (callbackThread != NULL)
+    {
+        recvQ.push({ IOtype::SHUTDOWN, 0, nullptr });
+        WaitForSingleObject(callbackThread, INFINITE);
+        CloseHandle(callbackThread);
+        callbackThread = NULL;
+    }
+
+    if (iocp != NULL)
+    {
+        for (int i = 0; i < 2; ++i)
+            if (ioThread[i] != NULL)
+                PostQueuedCompletionStatus(iocp, 0, 0, nullptr);
+    }
+    for (int i = 0; i < 2; ++i)
+    {
+        if (ioThread[i] != NULL)
+        {
+            WaitForSingleObject(ioThread[i], INFINITE);
+            CloseHandle(ioThread[i]);
+            ioThread[i] = NULL;
+        }
+    }
+
+    if (iocp != NULL)
+    {
+        CloseHandle(iocp);
+        iocp = NULL;
+    }
+    if (allIoDone != NULL)
+    {
+        CloseHandle(allIoDone);
+        allIoDone = NULL;
+    }
+    if (wsaStarted)
+    {
+        WSACleanup();
+        wsaStarted = false;
+    }
+	 sock = INVALID_SOCKET;
+    isInitialize = false;
 }
 
 unsigned int _stdcall DRClient::IOThreadMain(void* clClass)
 {
-	DRClient* cl = (DRClient*)clClass;
-	SOCKET sock;
-	DWORD bytesTrans;
-	LPPER_IO_INFO ioInfo;
-	DWORD flags = 0;
+    auto cl = (DRClient*)clClass;
+    while (true)
+    {
+        DWORD bytesTrans = 0;
+        ULONG_PTR completionKey = 0;
+        LPPER_IO_INFO ioInfo = nullptr;
+        BOOL success = GetQueuedCompletionStatus(cl->iocp, &bytesTrans,
+            &completionKey, (LPOVERLAPPED*)&ioInfo, INFINITE);
+        if (ioInfo == nullptr)
+            break;
 
-	while (cl->_endisFalse)
-	{
-		GetQueuedCompletionStatus(cl->iocp, &bytesTrans, (PULONG_PTR)&sock, (LPOVERLAPPED*)&ioInfo, INFINITE);
+        if (ioInfo->rwMode == IOtype::RECV)
+        {
+            if (!success || bytesTrans == 0 || !cl->running ||
+                !cl->RecvProcess(ioInfo->buffer, (int)bytesTrans))
+            {
+                cl->ioPool.Dealloc(ioInfo);
+                cl->CompleteIo();
+                cl->Disconnect();
+                continue;
+            }
 
-		if (ioInfo == NULL)
-		{
-			//printf("%d\n", GetLastError());
-			continue;
-		}
+            if (!cl->PostRecv(ioInfo))
+            {
+                cl->ioPool.Dealloc(ioInfo);
+                cl->CompleteIo();
+                cl->Disconnect();
+            }
+        }
+        else
+        {
+            if (!success || bytesTrans == 0 || bytesTrans > ioInfo->wsabuf.len)
+            {
+                cl->ioPool.Dealloc(ioInfo);
+                cl->CompleteIo();
+                cl->Disconnect();
+                continue;
+            }
 
-		if (ioInfo->rwMode == IOtype::RECV)
-		{
-			if (bytesTrans == 0)
-			{
-				cl->ioPool.Dealloc(ioInfo);
+            if (bytesTrans < ioInfo->wsabuf.len)
+            {
+                ioInfo->wsabuf.buf += bytesTrans;
+                ioInfo->wsabuf.len -= bytesTrans;
+                memset(&ioInfo->overlapped, 0, sizeof(OVERLAPPED));
+                int result = WSASend(cl->sock, &ioInfo->wsabuf, 1,
+                    NULL, 0, &ioInfo->overlapped, NULL);
+                if (result == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
+                {
+                    cl->ioPool.Dealloc(ioInfo);
+                    cl->CompleteIo();
+                    cl->Disconnect();
+                }
+                continue;
+            }
 
-				cl->recvQ.push({ IOtype::DCON, 0, NULL });
-
-				closesocket(sock);
-				continue;
-			}
-			else
-			{
-				cl->RecvProcess(ioInfo->buffer, bytesTrans);
-
-				memset(&ioInfo->overlapped, 0, sizeof(OVERLAPPED));
-				ioInfo->wsabuf.len = BUFSIZ;
-				ioInfo->wsabuf.buf = ioInfo->buffer;
-				ioInfo->rwMode = IOtype::RECV;
-				WSARecv(sock, &ioInfo->wsabuf, 1, NULL, &flags, &ioInfo->overlapped, NULL);
-			}
-		}
-		else
-		{
-			cl->recvQ.push({ IOtype::SEND, (int)bytesTrans, NULL });
-			cl->ioPool.Dealloc(ioInfo);
-		}
-	}
-
-	return 0;
+            cl->recvQ.push({ IOtype::SEND, ioInfo->totalBytes, nullptr });
+            cl->ioPool.Dealloc(ioInfo);
+            cl->CompleteIo();
+        }
+    }
+    return 0;
 }
 
 unsigned int _stdcall DRClient::SendThread(void* clClass)
 {
-	//TODO
-	auto cl = (DRClient*)clClass;
-	auto sendq = &cl->sendQ;
-	while (cl->_endisFalse)
-	{
-		PER_PROCESS_INFO info;
-		if (!sendq->pop(&info))
-			continue;
+    auto cl = (DRClient*)clClass;
+    PER_PROCESS_INFO info;
+    while (cl->running || cl->sendQ.size() > 0)
+    {
+        if (!cl->sendQ.pop(&info))
+        {
+            Sleep(0);
+            continue;
+        }
 
-		auto ioInfo = cl->ioPool.Alloc();
-		memset(&ioInfo->overlapped, 0, sizeof(OVERLAPPED));
+        auto ioInfo = cl->ioPool.Alloc();
+        memset(&ioInfo->overlapped, 0, sizeof(OVERLAPPED));
+        ioInfo->wsabuf.len = info.packet->callPacket(ioInfo->buffer);
+        ioInfo->wsabuf.buf = ioInfo->buffer;
+        ioInfo->rwMode = IOtype::SEND;
+        ioInfo->totalBytes = ioInfo->wsabuf.len;
+        cl->packetPool.Dealloc(info.packet);
 
-		auto packet = info.packet;
-		ioInfo->wsabuf.len = packet->callPacket(ioInfo->buffer);
-		ioInfo->wsabuf.buf = ioInfo->buffer;
-		ioInfo->rwMode = IOtype::SEND;
-		WSASend(cl->sock, &ioInfo->wsabuf, 1, NULL, 0, &ioInfo->overlapped, NULL);
-	}
-	return 0;
+        if (!cl->running || !cl->connected)
+        {
+            cl->ioPool.Dealloc(ioInfo);
+            continue;
+        }
+
+        cl->BeginIo();
+        int result = WSASend(cl->sock, &ioInfo->wsabuf, 1,
+            NULL, 0, &ioInfo->overlapped, NULL);
+        if (result == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
+        {
+            cl->ioPool.Dealloc(ioInfo);
+            cl->CompleteIo();
+            cl->Disconnect();
+        }
+    }
+    return 0;
 }
 
 unsigned int _stdcall DRClient::CallbackThread(void* clClass)
 {
-	DRClient* cl = (DRClient*)clClass;
-	while (cl->_endisFalse)
-	{
-		cl->OnUpdate();
+    auto cl = (DRClient*)clClass;
+    while (true)
+    {
+        cl->OnUpdate();
+        PER_PROCESS_INFO info;
+        if (!cl->recvQ.pop(&info))
+        {
+            Sleep(1);
+            continue;
+        }
 
-		PER_PROCESS_INFO info;
-		if (cl->recvQ.pop(&info))
-		{
-			switch (info.type)
-			{
-			case IOtype::SEND:
-				cl->OnSend(info.size);
-				break;
-			case IOtype::RECV:
-				cl->OnRecv(info.packet->getCallP(), info.size);
-				cl->packetPool.Dealloc(info.packet);
-				break;
-			case IOtype::DCON:
-				cl->OnDisconnected();
-				break;
-			}
-		}
-	}
-	return 0;
+        switch (info.type)
+        {
+        case IOtype::SEND:
+            cl->OnSend(info.size);
+            break;
+        case IOtype::RECV:
+            cl->OnRecv(info.packet->getCallP(), info.size);
+            cl->packetPool.Dealloc(info.packet);
+            break;
+        case IOtype::DCON:
+            cl->OnDisconnected();
+            break;
+        case IOtype::SHUTDOWN:
+            return 0;
+        }
+    }
 }
 
-void DRClient::RecvProcess(char* data, int size)
+bool DRClient::RecvProcess(char* data, int size)
 {
-	int result;
-	DRPacket::Header head;
+    DRPacket::Header head;
+    recvData.Lock();
+    if (recvData.Put(data, size) != size)
+    {
+        recvData.Unlock();
+        return false;
+    }
 
-	recvData.Lock();
-	result = recvData.Put(data, size);
-	if (result < size) {
-		recvData.Unlock();
-		return;
-	}
+    while (recvData.GetUseSize() > 0)
+    {
+        int useSize = recvData.GetUseSize();
+        if (useSize < sizeof(head))
+            break;
 
-	while (auto useSize = recvData.GetUseSize())
-	{
-		//check header;
-		if (useSize < sizeof(DRPacket::Header)) {
-			break;
-		}
-		recvData.Peek((char*)&head, sizeof(head));
+        recvData.Peek((char*)&head, sizeof(head));
+        if (head.code != DRPacket::CODE || head.size < 0 ||
+            head.size > DRPacket::max_data_size())
+        {
+            recvData.ClearBuffer();
+            recvData.Unlock();
+            return false;
+        }
 
-		//check code
-		//if(head.code != MYCODE)
-		//  return;
+        int packetSize = sizeof(head) + head.size;
+        if (useSize < packetSize)
+            break;
 
-		//check size;
-		if (useSize < sizeof(head) + head.size) {
-			break;
-		}
+        auto packet = packetPool.Alloc();
+        packet->init();
+        if (recvData.Get(packet->getBuf(), packetSize) != packetSize ||
+            !packet->movep(packetSize))
+        {
+            packetPool.Dealloc(packet);
+            recvData.Unlock();
+            return false;
+        }
+        recvQ.push({ IOtype::RECV, packet->size(), packet });
+    }
 
-		auto packet = packetPool.Alloc();
-		packet->init();
-		recvData.Get(packet->getBuf(), sizeof(head) + head.size);
-		packet->movep(sizeof(head) + head.size);
+    recvData.Unlock();
+    return true;
+}
 
-		recvQ.push({ IOtype::RECV, packet->size(), packet });
-	}
-	recvData.Unlock();
+bool DRClient::PostRecv(LPPER_IO_INFO ioInfo)
+{
+    if (!running || !connected)
+        return false;
+
+    DWORD flags = 0;
+    memset(&ioInfo->overlapped, 0, sizeof(OVERLAPPED));
+    ioInfo->wsabuf.len = BUFSIZ;
+    ioInfo->wsabuf.buf = ioInfo->buffer;
+    ioInfo->rwMode = IOtype::RECV;
+    int result = WSARecv(sock, &ioInfo->wsabuf, 1, NULL,
+        &flags, &ioInfo->overlapped, NULL);
+    return result != SOCKET_ERROR || WSAGetLastError() == WSA_IO_PENDING;
+}
+
+void DRClient::Disconnect()
+{
+	running.store(false);
+	bool notify = connected.exchange(false);
+
+    if (socketOpen.exchange(false))
+    {
+        shutdown(sock, SD_BOTH);
+        closesocket(sock);
+    }
+	if (notify)
+		recvQ.push({ IOtype::DCON, 0, nullptr });
+}
+
+void DRClient::BeginIo()
+{
+    if (pendingIo.fetch_add(1) == 0)
+        ResetEvent(allIoDone);
+}
+
+void DRClient::CompleteIo()
+{
+    if (pendingIo.fetch_sub(1) == 1)
+        SetEvent(allIoDone);
 }

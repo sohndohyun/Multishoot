@@ -18,6 +18,7 @@ MultiShoot::MultiShoot() {
 }
 
 MultiShoot::~MultiShoot() {
+	end();
 	for (auto it = _bullet.begin(); it != _bullet.end();) {
 		delete (*it);
 		it = _bullet.erase(it);
@@ -71,14 +72,19 @@ void MultiShoot::OnAccept(SOCKET sock)
 
 void MultiShoot::OnRecv(SOCKET sock, char* data, int size)
 {
+	if (data == nullptr || size < sizeof(PacketType))
+		return;
+
 	PacketType* packet = (PacketType*)data;
 	switch (*packet)
 	{
 	case PacketType::CHANGE_DIR_REQ:
 	{
+		if (size != sizeof(ChangeDirReq))
+			return;
 		ChangeDirReq* req = (ChangeDirReq*)packet;
 		auto player = FindPlayer(req->playerID);
-		if (player) {
+		if (player && player->sock == sock) {
 			player->dir = req->dir;
 
 			ChangeDirRes res;
@@ -92,9 +98,11 @@ void MultiShoot::OnRecv(SOCKET sock, char* data, int size)
 		break;
 	case PacketType::SHOOT_REQ:
 	{
+		if (size != sizeof(ShootReq))
+			return;
 		ShootReq* req = (ShootReq*)packet;
 		auto player = FindPlayer(req->playerID);
-		if (player) {
+		if (player && player->sock == sock) {
 			auto bullet = new SCObject;
 			bullet->id = _bulletIDCounter++;
 			bullet->dir = Vector(0, -1);
@@ -164,8 +172,10 @@ void MultiShoot::UpdatePosition(float dt)
 
 	for (auto it = _bullet.begin(); it != _bullet.end();) {
 		(*it)->pos = (*it)->pos + (*it)->dir * (*it)->speed * dt;
-		if ((*it)->pos.y < -25)
+		if ((*it)->pos.y < -25) {
+			delete (*it);
 			it = _bullet.erase(it);
+		}
 		else {
 			++it;
 		}
@@ -224,13 +234,13 @@ bool MultiShoot::BulletEnemyCollision(SCObject& enemy)
 	for (auto it = _bullet.begin(); it != _bullet.end();) {
 		Rect br((*it)->pos, (*it)->size);
 		if (Rect::IsOverlapped(er, br)) {
-			auto res = new MonsterHitRes;
-			res->bulletID = (*it)->id;
-			res->monsterHP = --enemy.hp;
-			res->monsterID = enemy.id;
-			res->type = PacketType::MONSTER_HIT_RES;
+			MonsterHitRes res;
+			res.bulletID = (*it)->id;
+			res.monsterHP = --enemy.hp;
+			res.monsterID = enemy.id;
+			res.type = PacketType::MONSTER_HIT_RES;
 			
-			SendToAll((char*)res, sizeof(MonsterHitRes));
+			SendToAll((char*)&res, sizeof(res));
 
 			auto bullet = *it;
 			_bullet.erase(it);

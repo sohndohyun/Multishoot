@@ -60,9 +60,6 @@
     <ClCompile Include="PlayerPref.cpp">
       <Filter>Engine\소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Rect.cpp">
-      <Filter>Engine\소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Engine\소스 파일</Filter>
     </ClCompile>
@@ -73,9 +70,6 @@
       <Filter>Engine\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="TVDR.cpp">
-      <Filter>Engine\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector.cpp">
       <Filter>Engine\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
@@ -94,21 +88,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DRClient.cpp">
-      <Filter>Network\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="DRObjectPool.cpp">
-      <Filter>Network\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="DRPacket.cpp">
-      <Filter>Network\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="DRQueue.cpp">
-      <Filter>Network\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="RingBuffer.cpp">
-      <Filter>Network\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="DRStack.cpp">
       <Filter>Network\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GameController.cpp">
@@ -149,9 +128,6 @@
     <ClInclude Include="PlayerPref.hpp">
       <Filter>Engine\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Rect.hpp">
-      <Filter>Engine\헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.hpp">
       <Filter>Engine\헤더 파일</Filter>
     </ClInclude>
@@ -162,9 +138,6 @@
       <Filter>Engine\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TVDR.hpp">
-      <Filter>Engine\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector.hpp">
       <Filter>Engine\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Player.hpp">
@@ -180,21 +153,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="DRClient.h">
-      <Filter>Network\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DRObjectPool.h">
-      <Filter>Network\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DRPacket.h">
-      <Filter>Network\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DRQueue.h">
-      <Filter>Network\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DRStack.h">
-      <Filter>Network\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="RingBuffer.h">
       <Filter>Network\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameController.h">

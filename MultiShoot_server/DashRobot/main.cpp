@@ -13,12 +13,18 @@ int main(int argc, char* argv[])
     if (argc == 2)
         port = atoi(argv[1]);
 
-    server.init(port, sysInfo.dwNumberOfProcessors);
+    int result = server.init(port, sysInfo.dwNumberOfProcessors);
+    if (result != 0)
+    {
+        fprintf(stderr, "server initialization failed: %d\n", result);
+        return result;
+    }
 
     fputs("Input message to quit: ", stdout);
     server.start();
     
     fgets(message, BUFSIZ, stdin);
+	server.end();
 
     return 0;
 }
