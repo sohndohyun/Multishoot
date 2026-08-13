@@ -350,4 +350,4 @@ MigrationBackup/
 .ionide/
 
 # Local player preferences generated at runtime
-/MultiShootClient/MultiShoot/PlayerPref.xml
+/Multishoot/PlayerPref.xml

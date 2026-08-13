@@ -1,5 +1,5 @@
 param(
-    [string]$ServerPath = "$PSScriptRoot\..\MultiShoot_server\x64\Debug\DashRobot.exe"
+    [string]$ServerPath = "$PSScriptRoot\..\x64\Debug\MultishootServer.exe"
 )
 
 $ErrorActionPreference = 'Stop'

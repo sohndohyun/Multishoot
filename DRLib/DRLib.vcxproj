@@ -78,18 +78,22 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DRClient.cpp" />
     <ClCompile Include="DRPacket.cpp" />
-    <ClCompile Include="Rect.cpp" />
+    <ClCompile Include="DRServer.cpp" />
     <ClCompile Include="RingBuffer.cpp" />
+    <ClCompile Include="tinyxml2.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DRObjectPool.h" />
+    <ClInclude Include="DRClient.h" />
     <ClInclude Include="DRPacket.h" />
-    <ClInclude Include="DRQueue.h" />
-    <ClInclude Include="DRStack.h" />
+    <ClInclude Include="DRServer.h" />
+    <ClInclude Include="mpsc_channel.hpp" />
+    <ClInclude Include="object_pool.hpp" />
     <ClInclude Include="Rect.hpp" />
     <ClInclude Include="RingBuffer.h" />
+    <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="Vector.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

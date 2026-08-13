@@ -1,78 +1,66 @@
-#include "DRPacket.h"
+﻿#include "DRPacket.h"
+
 #include <cstring>
 
-DRPacket::DRPacket()
-{ 
+dr_packet::dr_packet() = default;
 
+void dr_packet::init() {
+    std::memset(storage_.data(), 0, storage_.size());
+    header_ = reinterpret_cast<frame_header*>(storage_.data());
+    put_position_ = call_position_ = storage_.data() + sizeof(frame_header);
 }
 
-void DRPacket::init()
-{
-	memset(buffer, 0, BUFSIZ);
-	head = (Header*)buffer;
-	pPut = pCall = buffer + sizeof(Header);
+bool dr_packet::put(char* data, int size) {
+    if (data == nullptr || size < 0 || put_position_ - storage_.data() + size > packet_capacity) {
+        return false;
+    }
+
+    std::memcpy(put_position_, data, static_cast<std::size_t>(size));
+    put_position_ += size;
+    return true;
 }
 
-bool DRPacket::put(char* data, int size)
-{
-	if (data == nullptr || size < 0)
-		return false;
-	if (pPut - buffer + size > BUFSIZ)
-		return false;
-
-	memcpy(pPut, data, size);
-	pPut += size;
-	return true;
+int dr_packet::call_packet(char* data) {
+    const int packet_size = full_size();
+    std::memcpy(data, storage_.data(), static_cast<std::size_t>(packet_size));
+    return packet_size;
 }
 
-int DRPacket::callPacket(char* data)
-{
-	memcpy(data, buffer, size() + sizeof(Header));
-	return size() + sizeof(Header);
+bool dr_packet::put_packet(char* data, int size) {
+    if (data == nullptr || size < sizeof(frame_header) || size > packet_capacity) {
+        return false;
+    }
+
+    std::memcpy(storage_.data(), data, static_cast<std::size_t>(size));
+    header_ = reinterpret_cast<frame_header*>(storage_.data());
+    put_position_ = storage_.data() + size;
+    call_position_ = storage_.data() + sizeof(frame_header);
+    return true;
 }
 
-bool DRPacket::putPacket(char* data, int size)
-{
-	if (size < sizeof(Header) || size > BUFSIZ)
-		return false;
+bool dr_packet::call(char* data, int size) {
+    if (data == nullptr || size < 0 || put_position_ - call_position_ < size) {
+        return false;
+    }
 
-	auto temp = size - sizeof(Header);
-
-	memcpy(buffer, data, size);
-	pPut += temp;
-
-	return true;
+    std::memcpy(data, call_position_, static_cast<std::size_t>(size));
+    call_position_ += size;
+    return true;
 }
 
-bool DRPacket::call(char* data, int size)
-{
-	if (data == nullptr || size < 0)
-		return false;
-	if (pPut - pCall < size)
-		return false;
-
-	memcpy(data, pCall, size);
-	pCall += size;
-	return true;
+dr_packet::frame_header* dr_packet::header() {
+    return header_;
 }
 
-DRPacket::Header* DRPacket::header()
-{
-	return head;
+int dr_packet::size() const {
+    return static_cast<int>(put_position_ - call_position_);
 }
 
-int DRPacket::size()
-{
-	return static_cast<int>(pPut - pCall);
-}
+bool dr_packet::move_put_pointer(int size) {
+    if (size < header_size() || size > packet_capacity) {
+        return false;
+    }
 
-bool DRPacket::movep(int size)
-{
-	if(size < head_size())
-		return false;
-	if (size > BUFSIZ)
-		return false;
-
-	pPut = buffer + size;
-	return true;
+    put_position_ = storage_.data() + size;
+    return true;
 }

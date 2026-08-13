@@ -9,18 +9,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DRClient.cpp"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="DRPacket.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Rect.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="DRServer.cpp"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="RingBuffer.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="tinyxml2.cpp"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="Vector.cpp"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DRObjectPool.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="DRClient.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="DRPacket.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="DRQueue.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="DRStack.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="DRServer.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="mpsc_channel.hpp"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="object_pool.hpp"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="Rect.hpp"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="RingBuffer.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="tinyxml2.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="Vector.hpp"><Filter>Header Files</Filter></ClInclude>
   </ItemGroup>
 </Project>

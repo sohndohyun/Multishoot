@@ -1,285 +1,218 @@
-#include "RingBuffer.h"
+﻿#include "RingBuffer.h"
+
 #include <cstring>
 
-RingBuffer::RingBuffer()
-{
-	InitializeCriticalSection(&m_csQueue);
+dr::ring_buffer::ring_buffer() {
+    InitializeCriticalSection(&critical_section_);
 
-	m_chpBuffer = NULL;
-	m_iBufferSize = 0;
+    buffer_ = nullptr;
+    buffer_size_ = 0;
 
-	m_iReadPos = 0;
-	m_iWritePos = 0;
+    read_position_ = 0;
+    write_position_ = 0;
 
-	Initial(eBUFFER_DEFAULT);
-
+    initialize(default_size);
 }
-RingBuffer::RingBuffer(int iBufferSize)
-{
-	InitializeCriticalSection(&m_csQueue);
+dr::ring_buffer::ring_buffer(int buffer_size) {
+    InitializeCriticalSection(&critical_section_);
 
-	m_chpBuffer = NULL;
-	m_iBufferSize = 0;
+    buffer_ = nullptr;
+    buffer_size_ = 0;
 
-	m_iReadPos = 0;
-	m_iWritePos = 0;
+    read_position_ = 0;
+    write_position_ = 0;
 
-	Initial(iBufferSize);
+    initialize(buffer_size);
 }
-RingBuffer::~RingBuffer()
-{
-	DeleteCriticalSection(&m_csQueue);
+dr::ring_buffer::~ring_buffer() {
+    delete[] buffer_;
+    buffer_ = nullptr;
+    buffer_size_ = 0;
 
-	if (NULL != m_chpBuffer)
-		delete[] m_chpBuffer;
-
-	m_chpBuffer = NULL;
-	m_iBufferSize = 0;
-
-	m_iReadPos = 0;
-	m_iWritePos = 0;
-
+    read_position_ = 0;
+    write_position_ = 0;
+    DeleteCriticalSection(&critical_section_);
 }
 
-void RingBuffer::Initial(int iBufferSize)
-{
-	if (NULL != m_chpBuffer)
-		delete[] m_chpBuffer;
+void dr::ring_buffer::initialize(int buffer_size) {
+    delete[] buffer_;
+    buffer_ = nullptr;
+    buffer_size_ = 0;
+    read_position_ = 0;
+    write_position_ = 0;
 
-	if (0 >= iBufferSize) return;
+    if (buffer_size <= blank_size)
+        return;
 
-	m_iBufferSize = iBufferSize;
-
-	m_iReadPos = 0;
-	m_iWritePos = 0;
-
-	m_chpBuffer = new char[iBufferSize];
-
+    buffer_size_ = buffer_size;
+    buffer_ = new char[buffer_size];
 }
 
+int dr::ring_buffer::buffer_size() const {
+    if (nullptr != buffer_) {
+        return buffer_size_ - blank_size;
+    }
 
-int	RingBuffer::GetBufferSize(void)
-{
-	if (NULL != m_chpBuffer)
-	{
-		return m_iBufferSize - eBUFFER_BLANK;
-	}
-
-	return 0;
+    return 0;
 }
 
-int RingBuffer::GetUseSize(void)
-{
-	if (m_iReadPos <= m_iWritePos)
-	{
-		return m_iWritePos - m_iReadPos;
-	}
-	else
-	{
-		return m_iBufferSize - m_iReadPos + m_iWritePos;
-	}
-
+int dr::ring_buffer::used_size() const {
+    if (read_position_ <= write_position_) {
+        return write_position_ - read_position_;
+    } else {
+        return buffer_size_ - read_position_ + write_position_;
+    }
 }
 
-int RingBuffer::GetFreeSize(void)
-{
-	return m_iBufferSize - (GetUseSize() + eBUFFER_BLANK);
+int dr::ring_buffer::free_size() const {
+    return buffer_size_ - (used_size() + blank_size);
 }
 
-int RingBuffer::GetNotBrokenGetSize(void)
-{
-	if (m_iReadPos <= m_iWritePos)
-	{
-		return m_iWritePos - m_iReadPos;
-	}
-	else
-	{
-		return m_iBufferSize - m_iReadPos;
-	}
+int dr::ring_buffer::contiguous_read_size() const {
+    if (read_position_ <= write_position_) {
+        return write_position_ - read_position_;
+    } else {
+        return buffer_size_ - read_position_;
+    }
 }
 
-int RingBuffer::GetNotBrokenPutSize(void)
-{
-	if (m_iWritePos <= m_iReadPos)
-	{
-		return (m_iReadPos - m_iWritePos) - eBUFFER_BLANK;
-	}
-	else
-	{
-		if (m_iReadPos < eBUFFER_BLANK)
-		{
-			return (m_iBufferSize - m_iWritePos) - (eBUFFER_BLANK - m_iReadPos);
-		}
-		else
-		{
-			return m_iBufferSize - m_iWritePos;
-		}
-	}
+int dr::ring_buffer::contiguous_write_size() const {
+    if (write_position_ <= read_position_) {
+        return (read_position_ - write_position_) - blank_size;
+    } else {
+        if (read_position_ < blank_size) {
+            return (buffer_size_ - write_position_) - (blank_size - read_position_);
+        } else {
+            return buffer_size_ - write_position_;
+        }
+    }
 }
 
-int RingBuffer::Put(char* chpData, int iSize)
-{
-	int iWrite;
+int dr::ring_buffer::write(char* data, int size) {
+    int write_capacity;
 
-	if (GetFreeSize() < iSize)
-	{
-		return 0;
-		iSize = GetFreeSize();
-	}
+    if (free_size() < size)
+        return 0;
 
-	if (0 >= iSize)
-		return 0;
+    if (0 >= size)
+        return 0;
 
-	if (m_iReadPos <= m_iWritePos)
-	{
-		iWrite = m_iBufferSize - m_iWritePos;
+    if (read_position_ <= write_position_) {
+        write_capacity = buffer_size_ - write_position_;
 
-		if (iWrite >= iSize)
-		{
-			memcpy(m_chpBuffer + m_iWritePos, chpData, iSize);
-			m_iWritePos += iSize;
-		}
-		else
-		{
-			memcpy(m_chpBuffer + m_iWritePos, chpData, iWrite);
-			memcpy(m_chpBuffer, chpData + iWrite, iSize - iWrite);
-			m_iWritePos = iSize - iWrite;
-		}
-	}
-	else
-	{
-		memcpy(m_chpBuffer + m_iWritePos, chpData, iSize);
-		m_iWritePos += iSize;
-	}
+        if (write_capacity >= size) {
+            memcpy(buffer_ + write_position_, data, size);
+            write_position_ += size;
+        } else {
+            memcpy(buffer_ + write_position_, data, write_capacity);
+            memcpy(buffer_, data + write_capacity, size - write_capacity);
+            write_position_ = size - write_capacity;
+        }
+    } else {
+        memcpy(buffer_ + write_position_, data, size);
+        write_position_ += size;
+    }
 
-	m_iWritePos = m_iWritePos == m_iBufferSize ? 0 : m_iWritePos;
+    write_position_ = write_position_ == buffer_size_ ? 0 : write_position_;
 
-	return iSize;
+    return size;
 }
-int RingBuffer::Get(char* chpDest, int iSize)
-{
-	int iRead;
+int dr::ring_buffer::read(char* destination, int size) {
+    int read_capacity;
 
-	if (GetUseSize() < iSize)
-		iSize = GetUseSize();
+    if (used_size() < size)
+        size = used_size();
 
-	if (0 >= iSize)
-		return 0;
+    if (0 >= size)
+        return 0;
 
-	if (m_iReadPos <= m_iWritePos)
-	{
-		memcpy(chpDest, m_chpBuffer + m_iReadPos, iSize);
-		m_iReadPos += iSize;
-	}
-	else
-	{
-		iRead = m_iBufferSize - m_iReadPos;
+    if (read_position_ <= write_position_) {
+        memcpy(destination, buffer_ + read_position_, size);
+        read_position_ += size;
+    } else {
+        read_capacity = buffer_size_ - read_position_;
 
-		if (iRead >= iSize)
-		{
-			memcpy(chpDest, m_chpBuffer + m_iReadPos, iSize);
-			m_iReadPos += iSize;
-		}
-		else
-		{
-			memcpy(chpDest, m_chpBuffer + m_iReadPos, iRead);
-			memcpy(chpDest + iRead, m_chpBuffer, iSize - iRead);
-			m_iReadPos = iSize - iRead;
-		}
-	}
+        if (read_capacity >= size) {
+            memcpy(destination, buffer_ + read_position_, size);
+            read_position_ += size;
+        } else {
+            memcpy(destination, buffer_ + read_position_, read_capacity);
+            memcpy(destination + read_capacity, buffer_, size - read_capacity);
+            read_position_ = size - read_capacity;
+        }
+    }
 
-	return iSize;
+    read_position_ = read_position_ == buffer_size_ ? 0 : read_position_;
+    return size;
 }
-int	RingBuffer::Peek(char* chpDest, int iSize)
-{
-	int iRead;
-	if (GetUseSize() < iSize)
-		iSize = GetUseSize();
+int dr::ring_buffer::peek(char* destination, int size) const {
+    int read_capacity;
+    if (used_size() < size)
+        size = used_size();
 
-	if (0 >= iSize)
-		return 0;
+    if (0 >= size)
+        return 0;
 
-	if (m_iReadPos <= m_iWritePos)
-	{
-		memcpy(chpDest, m_chpBuffer + m_iReadPos, iSize);
-	}
-	else
-	{
-		iRead = m_iBufferSize - m_iReadPos;
-		if (iRead >= iSize)
-		{
-			memcpy(chpDest, m_chpBuffer + m_iReadPos, iSize);
-		}
-		else
-		{
-			memcpy(chpDest, m_chpBuffer + m_iReadPos, iRead);
-			memcpy(chpDest + iRead, m_chpBuffer, iSize - iRead);
-		}
-	}
+    if (read_position_ <= write_position_) {
+        memcpy(destination, buffer_ + read_position_, size);
+    } else {
+        read_capacity = buffer_size_ - read_position_;
+        if (read_capacity >= size) {
+            memcpy(destination, buffer_ + read_position_, size);
+        } else {
+            memcpy(destination, buffer_ + read_position_, read_capacity);
+            memcpy(destination + read_capacity, buffer_, size - read_capacity);
+        }
+    }
 
-	return iSize;
-
+    return size;
 }
 
-void RingBuffer::RemoveData(int iSize)
-{
-	int iRead;
+void dr::ring_buffer::remove_data(int size) {
+    int read_capacity;
 
-	if (GetUseSize() < iSize)
-		iSize = GetUseSize();
+    if (used_size() < size)
+        size = used_size();
 
-	if (0 >= iSize)
-		return;
+    if (0 >= size)
+        return;
 
-	if (m_iReadPos < m_iWritePos)
-	{
-		m_iReadPos += iSize;
-	}
-	else
-	{
-		iRead = m_iBufferSize - m_iReadPos;
+    if (read_position_ < write_position_) {
+        read_position_ += size;
+    } else {
+        read_capacity = buffer_size_ - read_position_;
 
-		if (iRead >= iSize)
-		{
-			m_iReadPos += iSize;
-		}
-		else
-		{
-			m_iReadPos = iSize - iRead;
-		}
-	}
+        if (read_capacity >= size) {
+            read_position_ += size;
+        } else {
+            read_position_ = size - read_capacity;
+        }
+    }
 
-	m_iReadPos = m_iReadPos == m_iBufferSize ? 0 : m_iReadPos;
+    read_position_ = read_position_ == buffer_size_ ? 0 : read_position_;
 }
 
-void RingBuffer::ClearBuffer(void)
-{
-	m_iReadPos = 0;
-	m_iWritePos = 0;
+void dr::ring_buffer::clear() {
+    read_position_ = 0;
+    write_position_ = 0;
 }
 
-
-char* RingBuffer::GetBufferPtr(void)
-{
-	return m_chpBuffer;
+char* dr::ring_buffer::buffer() {
+    return buffer_;
 }
 
-char* RingBuffer::GetReadBufferPtr(void)
-{
-	return m_chpBuffer + m_iReadPos;
+char* dr::ring_buffer::read_buffer() {
+    return buffer_ + read_position_;
 }
 
-char* RingBuffer::GetWriteBufferPtr(void)
-{
-	return m_chpBuffer + m_iWritePos;
+char* dr::ring_buffer::write_buffer() {
+    return buffer_ + write_position_;
 }
 
-void RingBuffer::Lock(void)
-{
-	EnterCriticalSection(&m_csQueue);
+void dr::ring_buffer::lock() {
+    EnterCriticalSection(&critical_section_);
 }
 
-void RingBuffer::Unlock(void)
-{
-	LeaveCriticalSection(&m_csQueue);
+void dr::ring_buffer::unlock() {
+    LeaveCriticalSection(&critical_section_);
 }

@@ -1,47 +1,46 @@
 ﻿#pragma once
+
 #include <WinSock2.h>
 
-class RingBuffer
-{
-public:
-	enum e_AYA_STREAM_SQ
-	{
-		eBUFFER_DEFAULT = 20960,		// 버퍼의 기본 크기.
-		eBUFFER_BLANK = 8				// 확실한 구분을 위해 8Byte 의 빈공간.
-	};
+namespace dr {
 
-public:
+class ring_buffer final {
+  public:
+    enum class buffer_constant {
+        buffer_default = 20960,
+        buffer_blank = 8,
+    };
 
-	RingBuffer(void);
-	RingBuffer(int iBufferSize);
+    ring_buffer();
+    explicit ring_buffer(int buffer_size);
+    ~ring_buffer();
 
-	virtual	~RingBuffer(void);
-	void	Initial(int iBufferSize);
-	int		GetBufferSize(void);
-	int		GetUseSize(void);
-	int		GetFreeSize(void);
-	int		GetNotBrokenGetSize(void);
-	int		GetNotBrokenPutSize(void);
-	int		Put(char* chpData, int iSize);
-	int		Get(char* chpDest, int iSize);
-	int		Peek(char* chpDest, int iSize);
+    void initialize(int buffer_size);
+    [[nodiscard]] int buffer_size() const;
+    [[nodiscard]] int used_size() const;
+    [[nodiscard]] int free_size() const;
+    [[nodiscard]] int contiguous_read_size() const;
+    [[nodiscard]] int contiguous_write_size() const;
+    int write(char* data, int size);
+    int read(char* destination, int size);
+    int peek(char* destination, int size) const;
+    void remove_data(int size);
+    void clear();
+    char* buffer();
+    char* read_buffer();
+    char* write_buffer();
+    void lock();
+    void unlock();
 
+  private:
+    static constexpr int default_size = static_cast<int>(buffer_constant::buffer_default);
+    static constexpr int blank_size = static_cast<int>(buffer_constant::buffer_blank);
 
-
-	void	RemoveData(int iSize);
-	void	ClearBuffer(void);
-	char* GetBufferPtr(void);
-	char* GetReadBufferPtr(void);
-	char* GetWriteBufferPtr(void);
-	void	Lock(void);
-	void	Unlock(void);
-
-
-protected:
-
-	char*				m_chpBuffer;
-	int					m_iBufferSize;
-	int					m_iReadPos;
-	int					m_iWritePos;
-	CRITICAL_SECTION	m_csQueue;
+    char* buffer_ = nullptr;
+    int buffer_size_ = 0;
+    int read_position_ = 0;
+    int write_position_ = 0;
+    CRITICAL_SECTION critical_section_{};
 };
+
+} // namespace dr

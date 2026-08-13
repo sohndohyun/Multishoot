@@ -1,0 +1,26 @@
+Checks: >-
+  -*,
+  bugprone-*,
+  modernize-*,
+  performance-*,
+  readability-identifier-naming
+WarningsAsErrors: ''
+HeaderFilterRegex: '^(?!.*(?:SDL2|SDL2_ttf|tinyxml2)).*'
+FormatStyle: file
+CheckOptions:
+  - key: readability-identifier-naming.NamespaceCase
+    value: lower_case
+  - key: readability-identifier-naming.ClassCase
+    value: lower_case
+  - key: readability-identifier-naming.StructCase
+    value: lower_case
+  - key: readability-identifier-naming.EnumCase
+    value: lower_case
+  - key: readability-identifier-naming.EnumConstantCase
+    value: lower_case
+  - key: readability-identifier-naming.FunctionCase
+    value: lower_case
+  - key: readability-identifier-naming.VariableCase
+    value: lower_case
+  - key: readability-identifier-naming.PrivateMemberSuffix
+    value: '_'
