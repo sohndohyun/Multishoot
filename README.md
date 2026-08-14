@@ -16,13 +16,30 @@ Windows와 SDL2로 만든 2D 슈팅 게임입니다. 로컬 싱글 플레이와 
 .
 ├─ Multishoot.sln
 ├─ DRLib/
+│  ├─ network/
+│  ├─ containers/
+│  ├─ math/
+│  └─ third_party/
 ├─ Multishoot/
+│  ├─ engine/
+│  ├─ entities/
+│  ├─ controllers/
+│  ├─ scenes/
+│  └─ resource/
 ├─ MultishootServer/
+│  └─ game/
 ├─ tests/
 └─ readmeResource/
 ```
 
 `Multishoot`와 `MultishootServer`는 `DRLib` 프로젝트를 참조하므로 Visual Studio에서 솔루션을 빌드하면 공용 라이브러리가 먼저 빌드됩니다.
+
+## 코드 규칙
+
+- 자체 C++ 파일명은 `lower_snake_case`를 사용하고 헤더 확장자는 `.hpp`로 통일합니다.
+- `DRLib`의 자체 타입은 `dr` 네임스페이스에 둡니다.
+- 애플리케이션 타입은 전역 네임스페이스를 사용합니다.
+- SDL과 `tinyxml2` 같은 외부 코드는 원래 이름과 네임스페이스를 유지합니다.
 
 ## 빌드
 

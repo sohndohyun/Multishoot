@@ -1,162 +1,57 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Engine">
-      <UniqueIdentifier>{60cc3d3c-b0ba-4922-90b7-b47b6b5413b3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\소스 파일">
-      <UniqueIdentifier>{3045b48a-27e5-4071-9669-fe57945419f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\헤더 파일">
-      <UniqueIdentifier>{09e5c1fb-507c-43d4-b6f3-5a143b718f54}</UniqueIdentifier>
-    </Filter>
+    <Filter Include="engine"><UniqueIdentifier>{60CC3D3C-B0BA-4922-90B7-B47B6B5413B3}</UniqueIdentifier></Filter>
+    <Filter Include="entities"><UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier></Filter>
+    <Filter Include="controllers"><UniqueIdentifier>{93995380-89BD-4B04-88EB-625FBE52EBFB}</UniqueIdentifier></Filter>
+    <Filter Include="scenes"><UniqueIdentifier>{3045B48A-27E5-4071-9669-FE57945419F2}</UniqueIdentifier></Filter>
+    <Filter Include="resource"><UniqueIdentifier>{67DA6AB6-F800-4C08-8B7A-83BB121AAD01}</UniqueIdentifier></Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="HelloWorld.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="LobbyScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Engine\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Engine\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics.cpp">
-      <Filter>Engine\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Engine\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerPref.cpp">
-      <Filter>Engine\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Engine\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>Engine\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Engine\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SingleController.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameController.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="MultiController.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="MultiShootClient.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="engine\game_manager.cpp"><Filter>engine</Filter></ClCompile>
+    <ClCompile Include="engine\game_object.cpp"><Filter>engine</Filter></ClCompile>
+    <ClCompile Include="engine\graphics.cpp"><Filter>engine</Filter></ClCompile>
+    <ClCompile Include="engine\input.cpp"><Filter>engine</Filter></ClCompile>
+    <ClCompile Include="engine\object.cpp"><Filter>engine</Filter></ClCompile>
+    <ClCompile Include="engine\player_pref.cpp"><Filter>engine</Filter></ClCompile>
+    <ClCompile Include="engine\scene.cpp"><Filter>engine</Filter></ClCompile>
+    <ClCompile Include="engine\text.cpp"><Filter>engine</Filter></ClCompile>
+    <ClCompile Include="entities\bullet.cpp"><Filter>entities</Filter></ClCompile>
+    <ClCompile Include="entities\enemy.cpp"><Filter>entities</Filter></ClCompile>
+    <ClCompile Include="entities\player.cpp"><Filter>entities</Filter></ClCompile>
+    <ClCompile Include="controllers\game_controller.cpp"><Filter>controllers</Filter></ClCompile>
+    <ClCompile Include="controllers\multi_controller.cpp"><Filter>controllers</Filter></ClCompile>
+    <ClCompile Include="controllers\multi_shoot_client.cpp"><Filter>controllers</Filter></ClCompile>
+    <ClCompile Include="controllers\single_controller.cpp"><Filter>controllers</Filter></ClCompile>
+    <ClCompile Include="scenes\hello_world.cpp"><Filter>scenes</Filter></ClCompile>
+    <ClCompile Include="scenes\lobby_scene.cpp"><Filter>scenes</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HelloWorld.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="LobbyScene.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManager.hpp">
-      <Filter>Engine\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.hpp">
-      <Filter>Engine\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics.hpp">
-      <Filter>Engine\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.hpp">
-      <Filter>Engine\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.hpp">
-      <Filter>Engine\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerPref.hpp">
-      <Filter>Engine\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.hpp">
-      <Filter>Engine\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Text.hpp">
-      <Filter>Engine\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TVDR.hpp">
-      <Filter>Engine\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SingleController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MultiController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MultiShootClient.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
+    <ClInclude Include="engine\game_manager.hpp"><Filter>engine</Filter></ClInclude>
+    <ClInclude Include="engine\game_object.hpp"><Filter>engine</Filter></ClInclude>
+    <ClInclude Include="engine\graphics.hpp"><Filter>engine</Filter></ClInclude>
+    <ClInclude Include="engine\input.hpp"><Filter>engine</Filter></ClInclude>
+    <ClInclude Include="engine\object.hpp"><Filter>engine</Filter></ClInclude>
+    <ClInclude Include="engine\player_pref.hpp"><Filter>engine</Filter></ClInclude>
+    <ClInclude Include="engine\scene.hpp"><Filter>engine</Filter></ClInclude>
+    <ClInclude Include="engine\text.hpp"><Filter>engine</Filter></ClInclude>
+    <ClInclude Include="entities\bullet.hpp"><Filter>entities</Filter></ClInclude>
+    <ClInclude Include="entities\enemy.hpp"><Filter>entities</Filter></ClInclude>
+    <ClInclude Include="entities\player.hpp"><Filter>entities</Filter></ClInclude>
+    <ClInclude Include="controllers\game_controller.hpp"><Filter>controllers</Filter></ClInclude>
+    <ClInclude Include="controllers\multi_controller.hpp"><Filter>controllers</Filter></ClInclude>
+    <ClInclude Include="controllers\multi_shoot_client.hpp"><Filter>controllers</Filter></ClInclude>
+    <ClInclude Include="controllers\single_controller.hpp"><Filter>controllers</Filter></ClInclude>
+    <ClInclude Include="scenes\hello_world.hpp"><Filter>scenes</Filter></ClInclude>
+    <ClInclude Include="scenes\lobby_scene.hpp"><Filter>scenes</Filter></ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resource\1.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resource\background.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resource\enemy.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resource\player.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="resource\Plaguard-ZVnjx.ttf">
-      <Filter>리소스 파일</Filter>
-    </Font>
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="PlayerPref.xml">
-      <Filter>리소스 파일</Filter>
-    </Xml>
+    <Image Include="resource\1.bmp"><Filter>resource</Filter></Image>
+    <Image Include="resource\background.bmp"><Filter>resource</Filter></Image>
+    <Image Include="resource\enemy.bmp"><Filter>resource</Filter></Image>
+    <Image Include="resource\player.bmp"><Filter>resource</Filter></Image>
+    <Font Include="resource\Plaguard-ZVnjx.ttf"><Filter>resource</Filter></Font>
+    <Xml Include="PlayerPref.xml"><Filter>resource</Filter></Xml>
   </ItemGroup>
 </Project>

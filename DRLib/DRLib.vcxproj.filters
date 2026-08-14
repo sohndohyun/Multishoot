@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{68C4C468-D3C9-4C75-8E50-3F1D928A5F4D}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{E6B5146A-1C19-45F7-B42F-24C23392B0A6}</UniqueIdentifier>
-    </Filter>
+    <Filter Include="network"><UniqueIdentifier>{68C4C468-D3C9-4C75-8E50-3D8A5F4D10A1}</UniqueIdentifier></Filter>
+    <Filter Include="containers"><UniqueIdentifier>{E6B5146A-1C19-45F7-B42F-24C23392B0A6}</UniqueIdentifier></Filter>
+    <Filter Include="math"><UniqueIdentifier>{1DB05E2F-A243-4B08-A0A7-C2E503346C92}</UniqueIdentifier></Filter>
+    <Filter Include="third_party"><UniqueIdentifier>{A9D8EB2D-27D1-40D7-96F7-71D62807C6D4}</UniqueIdentifier></Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DRClient.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="DRPacket.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="DRServer.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="RingBuffer.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="tinyxml2.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Vector.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="network\client.cpp"><Filter>network</Filter></ClCompile>
+    <ClCompile Include="network\packet.cpp"><Filter>network</Filter></ClCompile>
+    <ClCompile Include="network\server.cpp"><Filter>network</Filter></ClCompile>
+    <ClCompile Include="containers\ring_buffer.cpp"><Filter>containers</Filter></ClCompile>
+    <ClCompile Include="math\vector.cpp"><Filter>math</Filter></ClCompile>
+    <ClCompile Include="third_party\tinyxml2.cpp"><Filter>third_party</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DRClient.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="DRPacket.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="DRServer.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="mpsc_channel.hpp"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="object_pool.hpp"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="Rect.hpp"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="RingBuffer.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="tinyxml2.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="Vector.hpp"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="network\client.hpp"><Filter>network</Filter></ClInclude>
+    <ClInclude Include="network\packet.hpp"><Filter>network</Filter></ClInclude>
+    <ClInclude Include="network\server.hpp"><Filter>network</Filter></ClInclude>
+    <ClInclude Include="containers\mpsc_channel.hpp"><Filter>containers</Filter></ClInclude>
+    <ClInclude Include="containers\object_pool.hpp"><Filter>containers</Filter></ClInclude>
+    <ClInclude Include="containers\ring_buffer.hpp"><Filter>containers</Filter></ClInclude>
+    <ClInclude Include="math\rect.hpp"><Filter>math</Filter></ClInclude>
+    <ClInclude Include="math\vector.hpp"><Filter>math</Filter></ClInclude>
+    <ClInclude Include="third_party\tinyxml2.h"><Filter>third_party</Filter></ClInclude>
   </ItemGroup>
 </Project>

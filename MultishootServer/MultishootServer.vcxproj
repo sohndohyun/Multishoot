@@ -73,7 +73,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\DRLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\DRLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -157,11 +157,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MultiShoot.cpp" />
+    <ClCompile Include="game\multi_shoot.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MultiShoot.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="game\multi_shoot.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DRLib\DRLib.vcxproj">

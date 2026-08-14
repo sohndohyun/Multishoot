@@ -67,6 +67,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
@@ -78,23 +79,23 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DRClient.cpp" />
-    <ClCompile Include="DRPacket.cpp" />
-    <ClCompile Include="DRServer.cpp" />
-    <ClCompile Include="RingBuffer.cpp" />
-    <ClCompile Include="tinyxml2.cpp" />
-    <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="network\client.cpp" />
+    <ClCompile Include="network\packet.cpp" />
+    <ClCompile Include="network\server.cpp" />
+    <ClCompile Include="containers\ring_buffer.cpp" />
+    <ClCompile Include="third_party\tinyxml2.cpp" />
+    <ClCompile Include="math\vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DRClient.h" />
-    <ClInclude Include="DRPacket.h" />
-    <ClInclude Include="DRServer.h" />
-    <ClInclude Include="mpsc_channel.hpp" />
-    <ClInclude Include="object_pool.hpp" />
-    <ClInclude Include="Rect.hpp" />
-    <ClInclude Include="RingBuffer.h" />
-    <ClInclude Include="tinyxml2.h" />
-    <ClInclude Include="Vector.hpp" />
+    <ClInclude Include="network\client.hpp" />
+    <ClInclude Include="network\packet.hpp" />
+    <ClInclude Include="network\server.hpp" />
+    <ClInclude Include="containers\mpsc_channel.hpp" />
+    <ClInclude Include="containers\object_pool.hpp" />
+    <ClInclude Include="math\rect.hpp" />
+    <ClInclude Include="containers\ring_buffer.hpp" />
+    <ClInclude Include="third_party\tinyxml2.h" />
+    <ClInclude Include="math\vector.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
