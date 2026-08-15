@@ -1,0 +1,16 @@
+{
+  "name": "multishoot",
+  "version-string": "1.0.0",
+  "builtin-baseline": "e55144c5a465b53bc71bd0b59111ea0b8bb039a5",
+  "dependencies": [
+    "protobuf",
+    "sdl2",
+    "sdl2-ttf"
+  ],
+  "overrides": [
+    {
+      "name": "protobuf",
+      "version": "3.21.12"
+    }
+  ]
+}

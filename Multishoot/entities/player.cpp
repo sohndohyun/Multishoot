@@ -2,6 +2,7 @@
 
 #include "entities/bullet.hpp"
 #include "engine/game_manager.hpp"
+#include "game/game_simulation.hpp"
 
 using dr::vector2;
 
@@ -9,7 +10,7 @@ player::player(Uint32 id_value, vector2 pos, Uint32 hp) : game_object("player.bm
     set_scale(0.2f, 0.2f);
 
     auto size = print_size();
-    move_speed_ = 150.f;
+    move_speed_ = multishoot::rules::player_speed;
     health_ = hp;
 
     direction_ = vector2(0, 0);
@@ -38,5 +39,7 @@ void player::update() {
 
 void player::update_health_bar() {
     auto size = print_size();
-    health_bar_->set_scale(size.x * static_cast<float>(health_) / 5, 10);
+    health_bar_->set_scale(size.x * static_cast<float>(health_) /
+                               multishoot::rules::player_health,
+                           10);
 }

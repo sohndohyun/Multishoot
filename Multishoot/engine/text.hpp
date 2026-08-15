@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "engine/game_object.hpp"
-#include "SDL_ttf.h"
+#include <SDL2/SDL_ttf.h>
 
 #include <string>
 

@@ -14,7 +14,8 @@ class multi_shoot_client final : public dr::client {
   public:
     multi_shoot_client();
     ~multi_shoot_client() override;
+    void send(const multishoot::protocol::ClientPacket& packet);
 
   public:
-    dr::mpsc_channel<packet_type*> data_channel_;
+    dr::mpsc_channel<multishoot::protocol::ServerPacket> data_channel_;
 };

@@ -1,0 +1,11 @@
+version: v2
+clean: true
+
+plugins:
+  - protoc_builtin: cpp
+    protoc_path: bin/protoc.exe
+    out: generated/cpp
+    strategy: all
+
+inputs:
+  - directory: schema

@@ -351,3 +351,6 @@ MigrationBackup/
 
 # Local player preferences generated at runtime
 /Multishoot/PlayerPref.xml
+
+# vcpkg manifest dependencies
+/vcpkg_installed/

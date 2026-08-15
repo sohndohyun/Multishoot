@@ -40,7 +40,7 @@ class hello_world final : public scene {
 
     text* kill_count_text_;
 
-    Uint32 id_;
+    bool logged_in_;
     dr::vector2 last_direction_;
     Uint32 kill_count_;
 

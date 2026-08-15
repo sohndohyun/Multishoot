@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="game"><UniqueIdentifier>{9956A822-BE04-4DCB-BE09-9FD5D1E6C5EE}</UniqueIdentifier></Filter>
+    <Filter Include="protocol"><UniqueIdentifier>{3C429537-D9F8-49BD-85CA-0D99503277E5}</UniqueIdentifier></Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="game\game_simulation.cpp"><Filter>game</Filter></ClCompile>
+    <ClCompile Include="..\schema\generated\cpp\multishoot\protocol\game.pb.cc"><Filter>protocol</Filter></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="game\game_simulation.hpp"><Filter>game</Filter></ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\schema\schema\multishoot\protocol\game.proto"><Filter>protocol</Filter></CustomBuild>
+  </ItemGroup>
+</Project>

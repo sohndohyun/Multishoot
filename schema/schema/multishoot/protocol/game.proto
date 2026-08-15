@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package multishoot.protocol;
+
+message Vector2 {
+  float x = 1;
+  float y = 2;
+}
+
+message ChangeDirectionRequest {
+  Vector2 direction = 1;
+}
+
+message ShootRequest {}
+
+message LoginResponse {
+  uint32 player_id = 1;
+}
+
+message PlayerSpawnResponse {
+  uint32 player_id = 1;
+  Vector2 direction = 2;
+  Vector2 position = 3;
+  uint32 health = 4;
+}
+
+message ChangeDirectionResponse {
+  Vector2 direction = 1;
+  Vector2 position = 2;
+  uint32 player_id = 3;
+}
+
+message ShootResponse {
+  Vector2 position = 1;
+  uint32 bullet_id = 2;
+}
+
+message MonsterSpawnResponse {
+  Vector2 position = 1;
+  uint32 monster_id = 2;
+  uint32 health = 3;
+}
+
+message MonsterHitResponse {
+  uint32 monster_id = 1;
+  uint32 bullet_id = 2;
+  uint32 monster_health = 3;
+}
+
+message PlayerHitResponse {
+  uint32 player_id = 1;
+  uint32 monster_id = 2;
+  uint32 player_health = 3;
+}
+
+message GameEndResponse {
+  uint32 player_id = 1;
+  uint32 score = 2;
+}
+
+message PlayerLeaveResponse {
+  uint32 player_id = 1;
+}
+
+message ClientPacket {
+  oneof payload {
+    ChangeDirectionRequest change_direction_request = 1;
+    ShootRequest shoot_request = 2;
+  }
+}
+
+message ServerPacket {
+  oneof payload {
+    LoginResponse login_response = 1;
+    PlayerSpawnResponse player_spawn_response = 2;
+    ChangeDirectionResponse change_direction_response = 3;
+    ShootResponse shoot_response = 4;
+    MonsterSpawnResponse monster_spawn_response = 5;
+    MonsterHitResponse monster_hit_response = 6;
+    PlayerHitResponse player_hit_response = 7;
+    GameEndResponse game_end_response = 8;
+    PlayerLeaveResponse player_leave_response = 9;
+  }
+}

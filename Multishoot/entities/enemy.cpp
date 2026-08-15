@@ -2,6 +2,7 @@
 
 #include "engine/game_manager.hpp"
 #include "engine/graphics.hpp"
+#include "game/game_simulation.hpp"
 
 using dr::vector2;
 
@@ -12,7 +13,7 @@ enemy::enemy(Uint32 id, vector2 pos, Uint32 hp) : game_object("enemy.bmp") {
     health_bar_->set_local_position(0, -11);
     add_child(health_bar_);
 
-    move_speed_ = 200.f;
+    move_speed_ = multishoot::rules::enemy_speed;
     initialize(id, pos, hp);
 }
 
@@ -42,5 +43,7 @@ void enemy::update() {
 
 void enemy::update_health_bar() {
     auto size = print_size();
-    health_bar_->set_scale(size.x * static_cast<float>(health_) / 5, 10);
+    health_bar_->set_scale(size.x * static_cast<float>(health_) /
+                               multishoot::rules::enemy_health,
+                           10);
 }

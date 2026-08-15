@@ -1,0 +1,6 @@
+generated/
+
+!bin/
+!bin/protoc.exe
+!bin/libprotoc.dll
+!bin/libprotobuf.dll

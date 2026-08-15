@@ -1,9 +1,6 @@
-﻿#include "controllers/multi_controller.hpp"
+#include "controllers/multi_controller.hpp"
 
-#include <iostream>
-using std::cout;
-using std::endl;
-using dr::vector2;
+#include <utility>
 
 multi_controller::multi_controller() {
     tool_.init("127.0.0.1", 3000);
@@ -11,37 +8,26 @@ multi_controller::multi_controller() {
 }
 
 multi_controller::~multi_controller() {
-    if (work_) {
+    if (work_)
         tool_.end();
-    }
 }
 
 void multi_controller::update() {
-
-    packet_type* packet;
-    if (tool_.data_channel_.try_receive(packet)) {
-        if (packet == nullptr) {
-            cout << "packet nullptr" << endl;
-        } else
-            enqueue(packet);
-    }
+    multishoot::protocol::ServerPacket packet;
+    if (tool_.data_channel_.try_receive(packet))
+        enqueue(std::move(packet));
 }
 
-void multi_controller::change_direction(vector2 dir, Uint32 id) {
-    if (work_) {
-        change_direction_request req;
-        req.dir = dir;
-        req.player_id = id;
-        req.type = packet_type::change_direction_request;
-        tool_.send_data(reinterpret_cast<char*>(&req), sizeof(change_direction_request));
-    }
+void multi_controller::change_direction(dr::vector2 direction) {
+    multishoot::protocol::ClientPacket packet;
+    auto* request = packet.mutable_change_direction_request();
+    request->mutable_direction()->set_x(direction.x);
+    request->mutable_direction()->set_y(direction.y);
+    tool_.send(packet);
 }
 
-void multi_controller::shoot(Uint32 id) {
-    if (work_) {
-        shoot_request req;
-        req.player_id = id;
-        req.type = packet_type::shoot_request;
-        tool_.send_data(reinterpret_cast<char*>(&req), sizeof(shoot_request));
-    }
+void multi_controller::shoot() {
+    multishoot::protocol::ClientPacket packet;
+    packet.mutable_shoot_request();
+    tool_.send(packet);
 }

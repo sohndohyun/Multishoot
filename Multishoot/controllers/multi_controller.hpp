@@ -10,8 +10,8 @@ class multi_controller final : public game_controller {
     multi_controller();
     ~multi_controller() override;
 
-    void change_direction(dr::vector2 dir, Uint32 id) override;
-    void shoot(Uint32 id) override;
+    void change_direction(dr::vector2 direction) override;
+    void shoot() override;
     bool is_working() override {
         return work_ && tool_.is_working();
     }
