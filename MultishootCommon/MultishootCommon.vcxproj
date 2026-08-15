@@ -56,16 +56,16 @@
     <ClCompile><RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary></ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="..\schema\schema\multishoot\protocol\game.proto">
-      <Command>call "$(ProjectDir)..\schema\parse.bat"</Command>
-      <Outputs>$(ProjectDir)..\schema\generated\cpp\multishoot\protocol\game.pb.cc;$(ProjectDir)..\schema\generated\cpp\multishoot\protocol\game.pb.h</Outputs>
-      <AdditionalInputs>$(ProjectDir)..\schema\parse.bat;$(ProjectDir)..\schema\bin\protoc.exe</AdditionalInputs>
-    </CustomBuild>
     <ClCompile Include="game\game_simulation.cpp" />
     <ClCompile Include="..\schema\generated\cpp\multishoot\protocol\game.pb.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\game_simulation.hpp" />
+    <ClInclude Include="..\schema\generated\cpp\multishoot\protocol\game.pb.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\schema\schema\multishoot\protocol\game.proto" />
+    <None Include="..\schema\parse.bat" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DRLib\DRLib.vcxproj">

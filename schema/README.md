@@ -25,20 +25,20 @@ import "multishoot/protocol/game.proto";
 
 ## 코드 생성
 
-루트 솔루션에서 `MultishootCommon`을 빌드하면 `game.proto`보다 생성 결과가 오래됐을 때 `parse.bat`가 자동 실행됩니다. 수동 실행도 가능합니다.
+빌드 중에는 `parse.bat`가 자동 실행되지 않습니다. `game.proto`를 변경했을 때 수동으로 실행합니다.
 
 ```powershell
 & '.\schema\parse.bat'
 ```
 
-생성 결과는 다음 위치에 기록되며 Git에는 포함하지 않습니다.
+생성 결과는 다음 위치에 기록되며 `MultishootCommon` 빌드 입력과 Git 관리 대상에 포함됩니다.
 
 ```text
 generated/cpp/multishoot/protocol/game.pb.h
 generated/cpp/multishoot/protocol/game.pb.cc
 ```
 
-`parse.bat`는 Buf CLI 없이 `schema/` 아래의 모든 `.proto` 파일을 재귀적으로 컴파일합니다. 생성 코드와 런타임의 버전을 맞춰야 하므로 번들 compiler와 `vcpkg.json`의 Protobuf 버전을 함께 변경해야 합니다.
+`parse.bat`는 Buf CLI 없이 `schema/` 아래의 모든 `.proto` 파일을 재귀적으로 컴파일합니다. 실행 후 변경된 생성 파일을 스키마와 함께 커밋합니다. 생성 코드와 런타임의 버전을 맞춰야 하므로 번들 compiler와 `vcpkg.json`의 Protobuf 버전을 함께 변경해야 합니다.
 
 ## 스키마 작성 규칙
 

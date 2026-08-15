@@ -47,14 +47,14 @@ Windows와 SDL2로 만든 2D 슈팅 게임입니다. 로컬 싱글 플레이와 
 
 루트 `vcpkg.json`은 Protobuf `3.21.12`와 registry baseline을 고정하고 SDL2/SDL2_ttf도 복원합니다. 각 C++ 프로젝트는 manifest mode를 사용하며 플랫폼에 따라 `x64-windows` 또는 `x86-windows` triplet을 선택합니다. Visual Studio/MSBuild가 첫 빌드에서 필요한 패키지를 자동 복원합니다.
 
-번들 `protoc.exe`도 `3.21.12`입니다. `game.proto`가 바뀌면 `MultishootCommon`의 빌드 전 단계에서 `schema\parse.bat`가 실행되며 다음 파일을 다시 만듭니다.
+번들 `protoc.exe`도 `3.21.12`입니다. 생성된 다음 파일은 `MultishootCommon`의 빌드 입력이자 Git 관리 대상입니다.
 
 ```text
 schema/generated/cpp/multishoot/protocol/game.pb.h
 schema/generated/cpp/multishoot/protocol/game.pb.cc
 ```
 
-생성 파일과 `vcpkg_installed/`는 Git에 포함하지 않습니다. 필요하면 수동으로도 생성할 수 있습니다.
+빌드 중에는 코드를 자동 생성하지 않습니다. `game.proto`를 변경한 경우 생성 파일을 수동으로 갱신해 스키마와 함께 커밋합니다. `vcpkg_installed/`만 Git에서 제외됩니다.
 
 ```powershell
 & '.\schema\parse.bat'
