@@ -11,11 +11,12 @@ schema/
 │  ├─ libprotoc.dll
 │  └─ libprotobuf.dll
 ├─ schema/multishoot/protocol/game.proto
-├─ generated/cpp/
 ├─ buf.yaml
 ├─ buf.gen.yaml
 └─ parse.bat
 ```
+
+생성 코드는 `../MultishootCommon/generated/cpp/`에 저장됩니다.
 
 `schema/schema/`가 protobuf import 기준 경로입니다. import는 이 경로를 기준으로 작성합니다.
 
@@ -34,8 +35,8 @@ import "multishoot/protocol/game.proto";
 생성 결과는 다음 위치에 기록되며 `MultishootCommon` 빌드 입력과 Git 관리 대상에 포함됩니다.
 
 ```text
-generated/cpp/multishoot/protocol/game.pb.h
-generated/cpp/multishoot/protocol/game.pb.cc
+../MultishootCommon/generated/cpp/multishoot/protocol/game.pb.h
+../MultishootCommon/generated/cpp/multishoot/protocol/game.pb.cc
 ```
 
 `parse.bat`는 Buf CLI 없이 `schema/` 아래의 모든 `.proto` 파일을 재귀적으로 컴파일합니다. 실행 후 변경된 생성 파일을 스키마와 함께 커밋합니다. 생성 코드와 런타임의 버전을 맞춰야 하므로 번들 compiler와 `vcpkg.json`의 Protobuf 버전을 함께 변경해야 합니다.
@@ -57,4 +58,4 @@ buf lint
 buf build
 ```
 
-기본 코드 생성 경로는 `parse.bat`이며 `buf.gen.yaml`도 같은 `generated/cpp` 경로를 사용합니다.
+기본 코드 생성 경로는 `parse.bat`이며 `buf.gen.yaml`도 같은 `MultishootCommon/generated/cpp` 경로를 사용합니다.

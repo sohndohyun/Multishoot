@@ -6,11 +6,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game\game_simulation.cpp"><Filter>game</Filter></ClCompile>
-    <ClCompile Include="..\schema\generated\cpp\multishoot\protocol\game.pb.cc"><Filter>protocol</Filter></ClCompile>
+    <ClCompile Include="generated\cpp\multishoot\protocol\game.pb.cc"><Filter>protocol</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\game_simulation.hpp"><Filter>game</Filter></ClInclude>
-    <ClInclude Include="..\schema\generated\cpp\multishoot\protocol\game.pb.h"><Filter>protocol</Filter></ClInclude>
+    <ClInclude Include="generated\cpp\multishoot\protocol\game.pb.h"><Filter>protocol</Filter></ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\schema\schema\multishoot\protocol\game.proto"><Filter>protocol</Filter></None>

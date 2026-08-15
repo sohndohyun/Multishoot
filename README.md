@@ -20,7 +20,8 @@ Windows와 SDL2로 만든 2D 슈팅 게임입니다. 로컬 싱글 플레이와 
 ├─ vcpkg.json
 ├─ DRLib/
 ├─ MultishootCommon/
-│  └─ game/
+│  ├─ game/
+│  └─ generated/cpp/
 ├─ Multishoot/
 │  ├─ engine/
 │  ├─ entities/
@@ -31,7 +32,6 @@ Windows와 SDL2로 만든 2D 슈팅 게임입니다. 로컬 싱글 플레이와 
 │  └─ game/
 ├─ schema/
 │  ├─ schema/multishoot/protocol/game.proto
-│  ├─ generated/cpp/
 │  └─ parse.bat
 └─ tests/
 ```
@@ -50,8 +50,8 @@ Windows와 SDL2로 만든 2D 슈팅 게임입니다. 로컬 싱글 플레이와 
 번들 `protoc.exe`도 `3.21.12`입니다. 생성된 다음 파일은 `MultishootCommon`의 빌드 입력이자 Git 관리 대상입니다.
 
 ```text
-schema/generated/cpp/multishoot/protocol/game.pb.h
-schema/generated/cpp/multishoot/protocol/game.pb.cc
+MultishootCommon/generated/cpp/multishoot/protocol/game.pb.h
+MultishootCommon/generated/cpp/multishoot/protocol/game.pb.cc
 ```
 
 빌드 중에는 코드를 자동 생성하지 않습니다. `game.proto`를 변경한 경우 생성 파일을 수동으로 갱신해 스키마와 함께 커밋합니다. `vcpkg_installed/`만 Git에서 제외됩니다.

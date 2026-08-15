@@ -4,7 +4,7 @@ clean: true
 plugins:
   - protoc_builtin: cpp
     protoc_path: bin/protoc.exe
-    out: generated/cpp
+    out: ../MultishootCommon/generated/cpp
     strategy: all
 
 inputs:

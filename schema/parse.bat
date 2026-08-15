@@ -3,7 +3,7 @@ setlocal
 
 set "PROTOC_EXE=%~dp0bin\protoc.exe"
 set "SCHEMA_DIR=%~dp0schema"
-set "CPP_OUT_DIR=%~dp0generated\cpp"
+set "CPP_OUT_DIR=%~dp0..\MultishootCommon\generated\cpp"
 set "PROTO_FILES="
 
 if not exist "%PROTOC_EXE%" (

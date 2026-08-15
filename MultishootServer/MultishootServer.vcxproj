@@ -83,7 +83,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\DRLib;$(ProjectDir)..\MultishootCommon;$(ProjectDir)..\schema\generated\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\DRLib;$(ProjectDir)..\MultishootCommon;$(ProjectDir)..\MultishootCommon\generated\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
   </ItemDefinitionGroup>
