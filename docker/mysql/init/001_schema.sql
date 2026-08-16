@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS `multishoot` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 CREATE DATABASE IF NOT EXISTS `multishoot_test` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS `multishoot`.`accounts` (
@@ -18,5 +19,6 @@ CREATE TABLE IF NOT EXISTS `multishoot_test`.`accounts` (
     PRIMARY KEY (`username`)
 ) ENGINE=InnoDB;
 
+GRANT ALL PRIVILEGES ON `multishoot`.* TO 'multishoot'@'%';
 GRANT ALL PRIVILEGES ON `multishoot_test`.* TO 'multishoot'@'%';
 FLUSH PRIVILEGES;

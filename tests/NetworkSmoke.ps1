@@ -1,5 +1,5 @@
 param(
-    [string]$ServerPath = "$PSScriptRoot\..\bld\x64\Debug\MultishootServer.exe",
+    [string]$ServerPath = "$PSScriptRoot\..\bld\x64\Debug\MultishootServer\MultishootServer.exe",
     [string]$DatabaseName = 'multishoot_test'
 )
 
@@ -66,7 +66,15 @@ function Resolve-Docker {
     $command = Get-Command docker.exe -ErrorAction SilentlyContinue
     if ($command) { return $command.Source }
     $fallback = Join-Path $env:LOCALAPPDATA 'Programs\DockerDesktop\resources\bin\docker.exe'
-    if (Test-Path -LiteralPath $fallback) { return $fallback }
+    if (Test-Path -LiteralPath $fallback) {
+        $env:PATH = "$(Split-Path -Parent $fallback);$env:PATH"
+        return $fallback
+    }
+    $fallback = Join-Path $env:ProgramFiles 'Docker\Docker\resources\bin\docker.exe'
+    if (Test-Path -LiteralPath $fallback) {
+        $env:PATH = "$(Split-Path -Parent $fallback);$env:PATH"
+        return $fallback
+    }
     throw 'Docker CLI was not found.'
 }
 
@@ -74,6 +82,13 @@ function Clear-TestDatabase {
     $docker = Resolve-Docker
     & $docker compose exec -T mysql mysql -uroot -pmultishoot_root_dev -D $DatabaseName -e 'TRUNCATE TABLE accounts;' | Out-Null
     if ($LASTEXITCODE -ne 0) { throw 'Could not clear the network test database.' }
+}
+
+function Set-TestBestScore([string]$username, [int]$score) {
+    $docker = Resolve-Docker
+    $sql = "UPDATE accounts SET best_score = $score WHERE username = '$username';"
+    & $docker compose exec -T mysql mysql -uroot -pmultishoot_root_dev -D $DatabaseName -e $sql | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw 'Could not seed the network test score.' }
 }
 
 function Start-TestServer {
@@ -98,13 +113,18 @@ function Stop-TestServer([System.Diagnostics.Process]$process) {
 
 function Invoke-Auth([System.Net.Sockets.TcpClient]$client,
                      [ValidateSet('Login', 'Signup')][string]$kind,
-                     [string]$username, [string]$password, [int]$expected) {
+                     [string]$username, [string]$password, [int]$expected,
+                     [int]$expectedBestScore = -1) {
     $request = New-AuthRequest $kind $username $password
     $client.GetStream().Write($request, 0, $request.Length)
     $body = Read-Frame $client
-    if ($body.Length -ne 4 -or $body[0] -ne 0x52 -or $body[2] -ne 0x08 -or
+    if ($body.Length -lt 4 -or $body[0] -ne 0x52 -or $body[2] -ne 0x08 -or
         $body[3] -ne $expected) {
         throw "Unexpected auth result for ${kind}/${username}: $($body -join ',')"
+    }
+    if ($expectedBestScore -ge 0 -and
+        ($body.Length -lt 6 -or $body[4] -ne 0x10 -or $body[5] -ne $expectedBestScore)) {
+        throw "Unexpected best score for ${kind}/${username}: $($body -join ',')"
     }
 
     if ($expected -eq 1) {
@@ -177,11 +197,34 @@ try {
     if ($inUse) { $inUse.Close() }
     $inUse = $null
     $unauthenticated = $null
+    Set-TestBestScore 'player_a' 42
     Stop-TestServer $server
     $server = Start-TestServer
     Start-Sleep -Milliseconds 300
     $a = Connect-Client
-    Invoke-Auth $a Login 'player_a' 'password1' 1
+    Invoke-Auth $a Login 'player_a' 'password1' 1 42
+
+    $docker = Resolve-Docker
+    & $docker compose stop mysql | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw 'Could not stop MySQL for reconnect testing.' }
+    Start-Sleep -Milliseconds 300
+    $reconnect = Connect-Client
+    Invoke-Auth $reconnect Login 'reconnect_probe' 'password1' 6
+    & $docker compose up -d --wait | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw 'Could not restart MySQL for reconnect testing.' }
+    Invoke-Auth $reconnect Signup 'reconnect_user' 'password1' 1
+    $reconnect.Close()
+    $reconnect = $null
+
+    $cancel = Connect-Client
+    $cancelRequest = New-AuthRequest Signup 'cancel_user' 'password3'
+    $cancel.GetStream().Write($cancelRequest, 0, $cancelRequest.Length)
+    Start-Sleep -Milliseconds 50
+    $cancel.Close()
+    $cancel = $null
+    Start-Sleep -Milliseconds 200
+    $cancel = Connect-Client
+    Invoke-Auth $cancel Login 'cancel_user' 'password3' 1
 
     $b = Connect-Client
     Invoke-Auth $b Signup 'player_b' 'password2' 1
@@ -233,6 +276,8 @@ try {
 finally {
     if ($a) { $a.Close() }
     if ($b) { $b.Close() }
+    if ($reconnect) { $reconnect.Close() }
+    if ($cancel) { $cancel.Close() }
     if ($duplicate) { $duplicate.Close() }
     if ($wrong) { $wrong.Close() }
     if ($inUse) { $inUse.Close() }

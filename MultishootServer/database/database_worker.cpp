@@ -5,7 +5,6 @@
 #include <mysql/errmsg.h>
 #include <mysql/mysqld_error.h>
 
-#include <algorithm>
 #include <array>
 #include <cstdio>
 #include <cstring>
@@ -23,22 +22,6 @@ struct account_record final {
     std::array<unsigned char, 32> hash{};
     std::uint32_t best_score = 0;
 };
-
-bool valid_username(const std::string& username) {
-    if (username.size() < 3 || username.size() > 16)
-        return false;
-    return std::all_of(username.begin(), username.end(), [](unsigned char value) {
-        return (value >= 'a' && value <= 'z') || (value >= 'A' && value <= 'Z') ||
-               (value >= '0' && value <= '9') || value == '_';
-    });
-}
-
-bool valid_password(const std::string& password) {
-    if (password.size() < 8 || password.size() > 64)
-        return false;
-    return std::all_of(password.begin(), password.end(),
-                       [](unsigned char value) { return value >= 33 && value <= 126; });
-}
 
 bool derive_password_hash(const std::string& password,
                           const std::array<unsigned char, 16>& salt,
@@ -219,6 +202,7 @@ class worker_database final {
         results[2].buffer = &record.best_score;
         results[2].buffer_length = sizeof(record.best_score);
         results[2].length = &score_length;
+        results[2].is_unsigned = 1;
         if (mysql_stmt_bind_result(statement.get(), results) != 0 ||
             mysql_stmt_store_result(statement.get()) != 0) {
             lost_connection = connection_error(mysql_stmt_errno(statement.get()));
@@ -256,6 +240,7 @@ class worker_database final {
         parameters[0].buffer_type = MYSQL_TYPE_LONG;
         parameters[0].buffer = &score;
         parameters[0].buffer_length = sizeof(score);
+        parameters[0].is_unsigned = 1;
         parameters[1].buffer_type = MYSQL_TYPE_STRING;
         parameters[1].buffer = const_cast<char*>(username.data());
         parameters[1].buffer_length = username_length;
@@ -377,7 +362,10 @@ void database_worker::run() {
         if (!request_value.has_value())
             break;
         auto request = std::move(*request_value);
-        pending_requests_.fetch_sub(1, std::memory_order_release);
+        struct pending_request_guard final {
+            std::atomic<std::size_t>& count;
+            ~pending_request_guard() { count.fetch_sub(1, std::memory_order_release); }
+        } pending_guard{pending_requests_};
 
         if (!database.ready() && !database.reconnect()) {
             if (request.kind == request_kind::auth)

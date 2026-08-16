@@ -111,13 +111,13 @@ void multi_shoot::submit_authentication(SOCKET socket, const std::string& userna
                                          const std::string& password, bool signup) {
     using namespace multishoot::protocol;
 
+    if (pending_authentication_.contains(socket))
+        return;
+
     if (!valid_username(username) || !valid_password(password)) {
         send_auth_response(socket, AUTH_RESULT_INVALID_INPUT);
         return;
     }
-
-    if (pending_authentication_.contains(socket))
-        return;
 
     const auto connection = connection_ids_.find(socket);
     if (connection == connection_ids_.end())

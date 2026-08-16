@@ -4,6 +4,9 @@ setlocal EnableExtensions
 set "configuration=%~2"
 if not defined configuration set "configuration=Debug"
 set "bin=%~dp0bld\x64\%configuration%"
+set "server_bin=%bin%\MultishootServer"
+set "client_bin=%bin%\Multishoot"
+set "test_bin=%bin%\MultishootCommonTests"
 
 if "%~1"=="" set "menu=1" & goto menu
 if /i "%~1"=="server" goto server
@@ -23,35 +26,35 @@ if errorlevel 2 goto client
 goto server
 
 :server
-call :require "%bin%\MultishootServer.exe" || goto failed
+call :require "%server_bin%\MultishootServer.exe" || goto failed
 set "server_args=%~3 %~4 %~5 %~6 %~7 %~8 %~9"
-"%bin%\MultishootServer.exe" %server_args%
+"%server_bin%\MultishootServer.exe" %server_args%
 set "result=%errorlevel%"
 goto done
 
 :client
-call :require "%bin%\Multishoot.exe" || goto failed
+call :require "%client_bin%\Multishoot.exe" || goto failed
 pushd "%~dp0Multishoot"
-"%bin%\Multishoot.exe"
+"%client_bin%\Multishoot.exe"
 set "result=%errorlevel%"
 popd
 goto done
 
 :test
-call :require "%bin%\MultishootCommonTests.exe" || goto failed
-call :require "%bin%\MultishootServer.exe" || goto failed
+call :require "%test_bin%\MultishootCommonTests.exe" || goto failed
+call :require "%server_bin%\MultishootServer.exe" || goto failed
 call :find_docker || goto failed
 set "db_status_file=%TEMP%\multishoot-compose-status-%RANDOM%.txt"
 "%docker_path%" compose ps --status running --services > "%db_status_file%" 2>nul
-findstr /i /x "mysql" "%db_status_file%" >nul
+findstr /i "mysql" "%db_status_file%" >nul
 set "db_running=%errorlevel%"
 del /q "%db_status_file%" >nul 2>&1
 if not "%db_running%"=="0" (
     echo MySQL Compose service is not running. Run "%~nx0 db-up" first.
     goto failed
 )
-"%bin%\MultishootCommonTests.exe" || goto failed
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0tests\NetworkSmoke.ps1" -ServerPath "%bin%\MultishootServer.exe" -DatabaseName "multishoot_test"
+"%test_bin%\MultishootCommonTests.exe" || goto failed
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0tests\NetworkSmoke.ps1" -ServerPath "%server_bin%\MultishootServer.exe" -DatabaseName "multishoot_test"
 set "result=%errorlevel%"
 goto done
 
@@ -81,6 +84,11 @@ if not errorlevel 1 (
 set "docker_path=%LOCALAPPDATA%\Programs\DockerDesktop\resources\bin\docker.exe"
 if exist "%docker_path%" (
     set "PATH=%LOCALAPPDATA%\Programs\DockerDesktop\resources\bin;%PATH%"
+    exit /b 0
+)
+set "docker_path=%ProgramFiles%\Docker\Docker\resources\bin\docker.exe"
+if exist "%docker_path%" (
+    set "PATH=%ProgramFiles%\Docker\Docker\resources\bin;%PATH%"
     exit /b 0
 )
 echo Docker CLI was not found in PATH or the Docker Desktop installation path.

@@ -27,6 +27,10 @@ void assert_round_trip(const ServerPacket& packet) {
     ServerPacket parsed;
     assert(parsed.ParseFromString(data));
     assert(parsed.payload_case() == packet.payload_case());
+    if (packet.payload_case() == ServerPacket::kAuthResponse) {
+        assert(parsed.auth_response().result() == packet.auth_response().result());
+        assert(parsed.auth_response().best_score() == packet.auth_response().best_score());
+    }
 }
 
 void assert_round_trip(const ClientPacket& packet) {

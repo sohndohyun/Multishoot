@@ -70,7 +70,7 @@ MultishootCommon/generated/cpp/multishoot/protocol/game.pb.cc
 msbuild .\Multishoot.sln /m /t:Build /p:Configuration=Debug /p:Platform=x64
 ```
 
-지원 구성은 Debug/Release와 x64/Win32입니다. 출력은 예를 들어 `bld\x64\Debug`에 생성됩니다.
+지원 구성은 Debug/Release와 x64/Win32입니다. 실행 파일은 예를 들어 `bld\x64\Debug\MultishootServer`처럼 프로젝트별 출력 폴더에 생성됩니다.
 
 ## 실행
 
