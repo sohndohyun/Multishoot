@@ -1,3 +1,32 @@
+# C++ Style
+
+Apply these rules to project-owned C++ code. Generated and third-party code is exempt.
+
+## Formatting
+
+Use the following `clang-format` settings as the style reference:
+
+```yaml
+BasedOnStyle: LLVM
+Language: Cpp
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+BreakBeforeBraces: Attach
+PointerAlignment: Left
+ReferenceAlignment: Left
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+NamespaceIndentation: None
+AllowShortFunctionsOnASingleLine: Empty
+```
+
+## Static Analysis
+
+Use the following `clang-tidy` settings when performing static analysis:
+
+```yaml
 Checks: >-
   -*,
   bugprone-*,
@@ -24,3 +53,4 @@ CheckOptions:
     value: lower_case
   - key: readability-identifier-naming.PrivateMemberSuffix
     value: '_'
+```

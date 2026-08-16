@@ -3,7 +3,7 @@ setlocal EnableExtensions
 
 set "configuration=%~2"
 if not defined configuration set "configuration=Debug"
-set "bin=%~dp0bld\x64\%configuration%"
+set "bin=%~dp0build\x64\%configuration%"
 set "server_bin=%bin%\MultishootServer"
 set "client_bin=%bin%\Multishoot"
 set "test_bin=%bin%\MultishootCommonTests"
@@ -109,5 +109,7 @@ exit /b %result%
 :require
 if exist "%~1" exit /b 0
 echo Missing executable: %~1
-echo Build first: msbuild "%~dp0Multishoot.sln" /m /p:Configuration=%configuration% /p:Platform=x64
+call "%~dp0build.bat" "%configuration%" || exit /b 1
+if exist "%~1" exit /b 0
+echo Build completed but the executable was not found: %~1
 exit /b 1

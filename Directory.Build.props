@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <OutDir>$(MSBuildThisFileDirectory)bld\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
+    <OutDir>$(MSBuildThisFileDirectory)build\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(OutDir)obj\$(MSBuildProjectName)\</IntDir>
   </PropertyGroup>
 </Project>

@@ -67,10 +67,11 @@ MultishootCommon/generated/cpp/multishoot/protocol/game.pb.cc
 ## 빌드
 
 ```powershell
-msbuild .\Multishoot.sln /m /t:Build /p:Configuration=Debug /p:Platform=x64
+.\build.bat
+.\build.bat Release
 ```
 
-지원 구성은 Debug/Release와 x64/Win32입니다. 실행 파일은 예를 들어 `bld\x64\Debug\MultishootServer`처럼 프로젝트별 출력 폴더에 생성됩니다.
+`build.bat`는 x64 Debug를 기본으로 빌드하며 인자로 Release를 지정할 수 있습니다. 실행 파일은 예를 들어 `build\x64\Debug\MultishootServer`처럼 프로젝트별 출력 폴더에 생성됩니다.
 
 ## 실행
 
@@ -93,6 +94,8 @@ Docker MySQL과 서버를 순서대로 실행합니다.
 ```powershell
 .\run.bat client
 ```
+
+필요한 실행 파일이 없으면 `run.bat`가 해당 구성의 `build.bat`를 자동으로 실행합니다.
 
 서버 기본값은 다음과 같습니다. 기존 단일 포트 인자도 호환되며 명명 옵션으로 덮어쓸 수 있습니다.
 

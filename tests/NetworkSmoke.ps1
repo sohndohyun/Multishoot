@@ -1,5 +1,5 @@
 param(
-    [string]$ServerPath = "$PSScriptRoot\..\bld\x64\Debug\MultishootServer\MultishootServer.exe",
+    [string]$ServerPath = "$PSScriptRoot\..\build\x64\Debug\MultishootServer\MultishootServer.exe",
     [string]$DatabaseName = 'multishoot_test'
 )
 
