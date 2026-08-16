@@ -47,7 +47,17 @@ void test_all_protocol_messages() {
     shoot.mutable_shoot_request();
     assert_round_trip(shoot);
 
-    std::vector<ServerPacket> packets(9);
+    ClientPacket login;
+    login.mutable_login_request()->set_username("player_one");
+    login.mutable_login_request()->set_password("password1");
+    assert_round_trip(login);
+
+    ClientPacket signup;
+    signup.mutable_signup_request()->set_username("player_two");
+    signup.mutable_signup_request()->set_password("password2");
+    assert_round_trip(signup);
+
+    std::vector<ServerPacket> packets(10);
     packets[0].mutable_login_response()->set_player_id(1);
     packets[1].mutable_player_spawn_response()->set_player_id(1);
     packets[2].mutable_change_direction_response()->set_player_id(1);
@@ -57,6 +67,9 @@ void test_all_protocol_messages() {
     packets[6].mutable_player_hit_response()->set_player_id(1);
     packets[7].mutable_game_end_response()->set_score(1);
     packets[8].mutable_player_leave_response()->set_player_id(1);
+    packets[9].mutable_auth_response()->set_result(
+        multishoot::protocol::AUTH_RESULT_SUCCESS);
+    packets[9].mutable_auth_response()->set_best_score(123);
     for (const auto& packet : packets)
         assert_round_trip(packet);
 }

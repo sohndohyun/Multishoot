@@ -42,6 +42,19 @@ bool input::is_key_up(SDL_Scancode key_code) {
     return previous_state && !current_state;
 }
 
+const std::string& input::text_input() {
+    return instance()->text_input_;
+}
+
+void input::begin_frame() {
+    text_input_.clear();
+}
+
+void input::handle_event(const SDL_Event& event) {
+    if (event.type == SDL_TEXTINPUT)
+        text_input_ += event.text.text;
+}
+
 void input::update_key_state() {
     auto key_states = SDL_GetKeyboardState(nullptr);
     for (int i = 0; i < SDL_NUM_SCANCODES; ++i) {

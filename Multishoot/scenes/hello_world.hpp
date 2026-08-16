@@ -10,6 +10,10 @@
 #include "math/vector.hpp"
 
 #include <list>
+#include <memory>
+#include <cstdint>
+
+class multi_shoot_client;
 
 class hello_world final : public scene {
   protected:
@@ -28,7 +32,8 @@ class hello_world final : public scene {
     enemy* find_enemy(Uint32 id);
 
   public:
-    hello_world(game_mode mode = game_mode::single);
+    hello_world();
+    hello_world(std::unique_ptr<multi_shoot_client> client, std::uint32_t best_score);
     ~hello_world() override = default;
 
   private:
@@ -39,8 +44,11 @@ class hello_world final : public scene {
     std::list<enemy*> enemy_list_;
 
     text* kill_count_text_;
+    text* best_score_text_ = nullptr;
 
     bool logged_in_;
+    bool multiplayer_ = false;
+    std::uint32_t best_score_ = 0;
     dr::vector2 last_direction_;
     Uint32 kill_count_;
 

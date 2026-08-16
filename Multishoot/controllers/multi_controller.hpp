@@ -2,21 +2,22 @@
 #include "controllers/game_controller.hpp"
 #include "controllers/multi_shoot_client.hpp"
 
+#include <memory>
+
 class multi_controller final : public game_controller {
   protected:
     void update() override;
 
   public:
-    multi_controller();
-    ~multi_controller() override;
+    explicit multi_controller(std::unique_ptr<multi_shoot_client> tool);
+    ~multi_controller() override = default;
 
     void change_direction(dr::vector2 direction) override;
     void shoot() override;
     bool is_working() override {
-        return work_ && tool_.is_working();
+        return tool_ && tool_->is_working();
     }
 
   private:
-    multi_shoot_client tool_;
-    bool work_;
+    std::unique_ptr<multi_shoot_client> tool_;
 };

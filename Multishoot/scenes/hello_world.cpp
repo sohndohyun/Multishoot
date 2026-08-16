@@ -15,11 +15,18 @@ using std::endl;
 using std::to_string;
 using dr::vector2;
 
-hello_world::hello_world(game_mode mode) {
-    if (mode == game_mode::single)
-        controller_ = new single_controller;
-    else
-        controller_ = new multi_controller;
+hello_world::hello_world() {
+    controller_ = new single_controller;
+    if (controller_->is_working()) {
+        start();
+        add_child(controller_);
+    } else
+        game_manager::change_scene(new lobby_scene);
+}
+
+hello_world::hello_world(std::unique_ptr<multi_shoot_client> client, std::uint32_t best_score)
+    : multiplayer_(true), best_score_(best_score) {
+    controller_ = new multi_controller(std::move(client));
     if (controller_->is_working()) {
         start();
         add_child(controller_);
@@ -37,6 +44,12 @@ void hello_world::start() {
 
     add_child(kill_count_text_);
     kill_count_text_->set_local_position(20, 20);
+    if (multiplayer_) {
+        best_score_text_ = new text("Plaguard-ZVnjx.ttf", 28);
+        best_score_text_->set_local_position(20, 60);
+        best_score_text_->set_text("MULTI BEST: " + to_string(best_score_));
+        add_child(best_score_text_);
+    }
 
     bullet_cool_time_ = multishoot::rules::shoot_cooldown;
     bullet_cool_counter_ = bullet_cool_time_;
@@ -102,9 +115,16 @@ void hello_world::update() {
         case multishoot::protocol::ServerPacket::kGameEndResponse: {
             std::cout << "game ended" << std::endl;
             const auto score = static_cast<int>(packet->game_end_response().score());
-            player_pref::set_int("best_score",
-                                 (std::max)(player_pref::get_int("best_score"), score));
-            player_pref::set_int("score", score);
+            if (multiplayer_) {
+                if (static_cast<std::uint32_t>(score) > best_score_)
+                    best_score_ = static_cast<std::uint32_t>(score);
+                if (best_score_text_)
+                    best_score_text_->set_text("MULTI BEST: " + to_string(best_score_));
+            } else {
+                player_pref::set_int("best_score",
+                                     (std::max)(player_pref::get_int("best_score"), score));
+                player_pref::set_int("score", score);
+            }
             logged_in_ = false;
             game_manager::change_scene(new lobby_scene);
         } break;

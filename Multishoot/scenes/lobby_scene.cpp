@@ -3,6 +3,7 @@
 #include "engine/game_manager.hpp"
 #include "engine/graphics.hpp"
 #include "scenes/hello_world.hpp"
+#include "scenes/auth_scene.hpp"
 #include "engine/input.hpp"
 #include "engine/player_pref.hpp"
 #include "third_party/tinyxml2.h"
@@ -59,8 +60,12 @@ void lobby_scene::start() {
 }
 
 void lobby_scene::update() {
-    if (input::is_key_down(SDL_SCANCODE_SPACE))
-        game_manager::change_scene(new hello_world(mode_));
+    if (input::is_key_down(SDL_SCANCODE_SPACE)) {
+        if (mode_ == game_mode::single)
+            game_manager::change_scene(new hello_world);
+        else
+            game_manager::change_scene(new auth_scene);
+    }
     if (input::is_key_down(SDL_SCANCODE_DOWN) || input::is_key_down(SDL_SCANCODE_UP))
         change_mode();
 }
@@ -84,5 +89,5 @@ int lobby_scene::best_score() {
 void lobby_scene::change_mode() {
     mode_ = mode_ == game_mode::single ? game_mode::multi : game_mode::single;
     selected_text_->set_local_position(selected_text_->local_position().x,
-                                       mode_ == game_mode::single ? 500 : 550);
+                                       mode_ == game_mode::single ? 500.f : 550.f);
 }

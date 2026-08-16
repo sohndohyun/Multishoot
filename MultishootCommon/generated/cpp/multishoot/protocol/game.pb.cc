@@ -60,6 +60,48 @@ struct ShootRequestDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ShootRequestDefaultTypeInternal _ShootRequest_default_instance_;
+PROTOBUF_CONSTEXPR LoginRequest::LoginRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.username_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.password_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct LoginRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR LoginRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~LoginRequestDefaultTypeInternal() {}
+  union {
+    LoginRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 LoginRequestDefaultTypeInternal _LoginRequest_default_instance_;
+PROTOBUF_CONSTEXPR SignupRequest::SignupRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.username_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.password_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct SignupRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SignupRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~SignupRequestDefaultTypeInternal() {}
+  union {
+    SignupRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SignupRequestDefaultTypeInternal _SignupRequest_default_instance_;
+PROTOBUF_CONSTEXPR AuthResponse::AuthResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.result_)*/0
+  , /*decltype(_impl_.best_score_)*/0u
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct AuthResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR AuthResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~AuthResponseDefaultTypeInternal() {}
+  union {
+    AuthResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AuthResponseDefaultTypeInternal _AuthResponse_default_instance_;
 PROTOBUF_CONSTEXPR LoginResponse::LoginResponse(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.player_id_)*/0u
@@ -220,8 +262,8 @@ struct ServerPacketDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ServerPacketDefaultTypeInternal _ServerPacket_default_instance_;
 }  // namespace protocol
 }  // namespace multishoot
-static ::_pb::Metadata file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[14];
-static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_multishoot_2fprotocol_2fgame_2eproto = nullptr;
+static ::_pb::Metadata file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[17];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_multishoot_2fprotocol_2fgame_2eproto[1];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_multishoot_2fprotocol_2fgame_2eproto = nullptr;
 
 const uint32_t TableStruct_multishoot_2fprotocol_2fgame_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -246,6 +288,30 @@ const uint32_t TableStruct_multishoot_2fprotocol_2fgame_2eproto::offsets[] PROTO
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::multishoot::protocol::LoginRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::multishoot::protocol::LoginRequest, _impl_.username_),
+  PROTOBUF_FIELD_OFFSET(::multishoot::protocol::LoginRequest, _impl_.password_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::multishoot::protocol::SignupRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::multishoot::protocol::SignupRequest, _impl_.username_),
+  PROTOBUF_FIELD_OFFSET(::multishoot::protocol::SignupRequest, _impl_.password_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::multishoot::protocol::AuthResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::multishoot::protocol::AuthResponse, _impl_.result_),
+  PROTOBUF_FIELD_OFFSET(::multishoot::protocol::AuthResponse, _impl_.best_score_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::multishoot::protocol::LoginResponse, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -330,6 +396,8 @@ const uint32_t TableStruct_multishoot_2fprotocol_2fgame_2eproto::offsets[] PROTO
   ~0u,  // no _inlined_string_donated_
   ::_pbi::kInvalidFieldOffsetTag,
   ::_pbi::kInvalidFieldOffsetTag,
+  ::_pbi::kInvalidFieldOffsetTag,
+  ::_pbi::kInvalidFieldOffsetTag,
   PROTOBUF_FIELD_OFFSET(::multishoot::protocol::ClientPacket, _impl_.payload_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::multishoot::protocol::ServerPacket, _internal_metadata_),
@@ -346,29 +414,36 @@ const uint32_t TableStruct_multishoot_2fprotocol_2fgame_2eproto::offsets[] PROTO
   ::_pbi::kInvalidFieldOffsetTag,
   ::_pbi::kInvalidFieldOffsetTag,
   ::_pbi::kInvalidFieldOffsetTag,
+  ::_pbi::kInvalidFieldOffsetTag,
   PROTOBUF_FIELD_OFFSET(::multishoot::protocol::ServerPacket, _impl_.payload_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::multishoot::protocol::Vector2)},
   { 8, -1, -1, sizeof(::multishoot::protocol::ChangeDirectionRequest)},
   { 15, -1, -1, sizeof(::multishoot::protocol::ShootRequest)},
-  { 21, -1, -1, sizeof(::multishoot::protocol::LoginResponse)},
-  { 28, -1, -1, sizeof(::multishoot::protocol::PlayerSpawnResponse)},
-  { 38, -1, -1, sizeof(::multishoot::protocol::ChangeDirectionResponse)},
-  { 47, -1, -1, sizeof(::multishoot::protocol::ShootResponse)},
-  { 55, -1, -1, sizeof(::multishoot::protocol::MonsterSpawnResponse)},
-  { 64, -1, -1, sizeof(::multishoot::protocol::MonsterHitResponse)},
-  { 73, -1, -1, sizeof(::multishoot::protocol::PlayerHitResponse)},
-  { 82, -1, -1, sizeof(::multishoot::protocol::GameEndResponse)},
-  { 90, -1, -1, sizeof(::multishoot::protocol::PlayerLeaveResponse)},
-  { 97, -1, -1, sizeof(::multishoot::protocol::ClientPacket)},
-  { 106, -1, -1, sizeof(::multishoot::protocol::ServerPacket)},
+  { 21, -1, -1, sizeof(::multishoot::protocol::LoginRequest)},
+  { 29, -1, -1, sizeof(::multishoot::protocol::SignupRequest)},
+  { 37, -1, -1, sizeof(::multishoot::protocol::AuthResponse)},
+  { 45, -1, -1, sizeof(::multishoot::protocol::LoginResponse)},
+  { 52, -1, -1, sizeof(::multishoot::protocol::PlayerSpawnResponse)},
+  { 62, -1, -1, sizeof(::multishoot::protocol::ChangeDirectionResponse)},
+  { 71, -1, -1, sizeof(::multishoot::protocol::ShootResponse)},
+  { 79, -1, -1, sizeof(::multishoot::protocol::MonsterSpawnResponse)},
+  { 88, -1, -1, sizeof(::multishoot::protocol::MonsterHitResponse)},
+  { 97, -1, -1, sizeof(::multishoot::protocol::PlayerHitResponse)},
+  { 106, -1, -1, sizeof(::multishoot::protocol::GameEndResponse)},
+  { 114, -1, -1, sizeof(::multishoot::protocol::PlayerLeaveResponse)},
+  { 121, -1, -1, sizeof(::multishoot::protocol::ClientPacket)},
+  { 132, -1, -1, sizeof(::multishoot::protocol::ServerPacket)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
   &::multishoot::protocol::_Vector2_default_instance_._instance,
   &::multishoot::protocol::_ChangeDirectionRequest_default_instance_._instance,
   &::multishoot::protocol::_ShootRequest_default_instance_._instance,
+  &::multishoot::protocol::_LoginRequest_default_instance_._instance,
+  &::multishoot::protocol::_SignupRequest_default_instance_._instance,
+  &::multishoot::protocol::_AuthResponse_default_instance_._instance,
   &::multishoot::protocol::_LoginResponse_default_instance_._instance,
   &::multishoot::protocol::_PlayerSpawnResponse_default_instance_._instance,
   &::multishoot::protocol::_ChangeDirectionResponse_default_instance_._instance,
@@ -387,54 +462,69 @@ const char descriptor_table_protodef_multishoot_2fprotocol_2fgame_2eproto[] PROT
   "hoot.protocol\"\037\n\007Vector2\022\t\n\001x\030\001 \001(\002\022\t\n\001y"
   "\030\002 \001(\002\"I\n\026ChangeDirectionRequest\022/\n\tdire"
   "ction\030\001 \001(\0132\034.multishoot.protocol.Vector"
-  "2\"\016\n\014ShootRequest\"\"\n\rLoginResponse\022\021\n\tpl"
-  "ayer_id\030\001 \001(\r\"\231\001\n\023PlayerSpawnResponse\022\021\n"
-  "\tplayer_id\030\001 \001(\r\022/\n\tdirection\030\002 \001(\0132\034.mu"
-  "ltishoot.protocol.Vector2\022.\n\010position\030\003 "
-  "\001(\0132\034.multishoot.protocol.Vector2\022\016\n\006hea"
-  "lth\030\004 \001(\r\"\215\001\n\027ChangeDirectionResponse\022/\n"
-  "\tdirection\030\001 \001(\0132\034.multishoot.protocol.V"
-  "ector2\022.\n\010position\030\002 \001(\0132\034.multishoot.pr"
-  "otocol.Vector2\022\021\n\tplayer_id\030\003 \001(\r\"R\n\rSho"
-  "otResponse\022.\n\010position\030\001 \001(\0132\034.multishoo"
-  "t.protocol.Vector2\022\021\n\tbullet_id\030\002 \001(\r\"j\n"
-  "\024MonsterSpawnResponse\022.\n\010position\030\001 \001(\0132"
-  "\034.multishoot.protocol.Vector2\022\022\n\nmonster"
-  "_id\030\002 \001(\r\022\016\n\006health\030\003 \001(\r\"S\n\022MonsterHitR"
-  "esponse\022\022\n\nmonster_id\030\001 \001(\r\022\021\n\tbullet_id"
-  "\030\002 \001(\r\022\026\n\016monster_health\030\003 \001(\r\"Q\n\021Player"
-  "HitResponse\022\021\n\tplayer_id\030\001 \001(\r\022\022\n\nmonste"
-  "r_id\030\002 \001(\r\022\025\n\rplayer_health\030\003 \001(\r\"3\n\017Gam"
-  "eEndResponse\022\021\n\tplayer_id\030\001 \001(\r\022\r\n\005score"
-  "\030\002 \001(\r\"(\n\023PlayerLeaveResponse\022\021\n\tplayer_"
-  "id\030\001 \001(\r\"\246\001\n\014ClientPacket\022O\n\030change_dire"
-  "ction_request\030\001 \001(\0132+.multishoot.protoco"
-  "l.ChangeDirectionRequestH\000\022:\n\rshoot_requ"
-  "est\030\002 \001(\0132!.multishoot.protocol.ShootReq"
-  "uestH\000B\t\n\007payload\"\236\005\n\014ServerPacket\022<\n\016lo"
-  "gin_response\030\001 \001(\0132\".multishoot.protocol"
-  ".LoginResponseH\000\022I\n\025player_spawn_respons"
-  "e\030\002 \001(\0132(.multishoot.protocol.PlayerSpaw"
-  "nResponseH\000\022Q\n\031change_direction_response"
-  "\030\003 \001(\0132,.multishoot.protocol.ChangeDirec"
-  "tionResponseH\000\022<\n\016shoot_response\030\004 \001(\0132\""
-  ".multishoot.protocol.ShootResponseH\000\022K\n\026"
-  "monster_spawn_response\030\005 \001(\0132).multishoo"
-  "t.protocol.MonsterSpawnResponseH\000\022G\n\024mon"
-  "ster_hit_response\030\006 \001(\0132\'.multishoot.pro"
-  "tocol.MonsterHitResponseH\000\022E\n\023player_hit"
-  "_response\030\007 \001(\0132&.multishoot.protocol.Pl"
-  "ayerHitResponseH\000\022A\n\021game_end_response\030\010"
-  " \001(\0132$.multishoot.protocol.GameEndRespon"
-  "seH\000\022I\n\025player_leave_response\030\t \001(\0132(.mu"
-  "ltishoot.protocol.PlayerLeaveResponseH\000B"
-  "\t\n\007payloadb\006proto3"
+  "2\"\016\n\014ShootRequest\"2\n\014LoginRequest\022\020\n\010use"
+  "rname\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"3\n\rSignupR"
+  "equest\022\020\n\010username\030\001 \001(\t\022\020\n\010password\030\002 \001"
+  "(\t\"S\n\014AuthResponse\022/\n\006result\030\001 \001(\0162\037.mul"
+  "tishoot.protocol.AuthResult\022\022\n\nbest_scor"
+  "e\030\002 \001(\r\"\"\n\rLoginResponse\022\021\n\tplayer_id\030\001 "
+  "\001(\r\"\231\001\n\023PlayerSpawnResponse\022\021\n\tplayer_id"
+  "\030\001 \001(\r\022/\n\tdirection\030\002 \001(\0132\034.multishoot.p"
+  "rotocol.Vector2\022.\n\010position\030\003 \001(\0132\034.mult"
+  "ishoot.protocol.Vector2\022\016\n\006health\030\004 \001(\r\""
+  "\215\001\n\027ChangeDirectionResponse\022/\n\tdirection"
+  "\030\001 \001(\0132\034.multishoot.protocol.Vector2\022.\n\010"
+  "position\030\002 \001(\0132\034.multishoot.protocol.Vec"
+  "tor2\022\021\n\tplayer_id\030\003 \001(\r\"R\n\rShootResponse"
+  "\022.\n\010position\030\001 \001(\0132\034.multishoot.protocol"
+  ".Vector2\022\021\n\tbullet_id\030\002 \001(\r\"j\n\024MonsterSp"
+  "awnResponse\022.\n\010position\030\001 \001(\0132\034.multisho"
+  "ot.protocol.Vector2\022\022\n\nmonster_id\030\002 \001(\r\022"
+  "\016\n\006health\030\003 \001(\r\"S\n\022MonsterHitResponse\022\022\n"
+  "\nmonster_id\030\001 \001(\r\022\021\n\tbullet_id\030\002 \001(\r\022\026\n\016"
+  "monster_health\030\003 \001(\r\"Q\n\021PlayerHitRespons"
+  "e\022\021\n\tplayer_id\030\001 \001(\r\022\022\n\nmonster_id\030\002 \001(\r"
+  "\022\025\n\rplayer_health\030\003 \001(\r\"3\n\017GameEndRespon"
+  "se\022\021\n\tplayer_id\030\001 \001(\r\022\r\n\005score\030\002 \001(\r\"(\n\023"
+  "PlayerLeaveResponse\022\021\n\tplayer_id\030\001 \001(\r\"\240"
+  "\002\n\014ClientPacket\022O\n\030change_direction_requ"
+  "est\030\001 \001(\0132+.multishoot.protocol.ChangeDi"
+  "rectionRequestH\000\022:\n\rshoot_request\030\002 \001(\0132"
+  "!.multishoot.protocol.ShootRequestH\000\022:\n\r"
+  "login_request\030\003 \001(\0132!.multishoot.protoco"
+  "l.LoginRequestH\000\022<\n\016signup_request\030\004 \001(\013"
+  "2\".multishoot.protocol.SignupRequestH\000B\t"
+  "\n\007payload\"\332\005\n\014ServerPacket\022<\n\016login_resp"
+  "onse\030\001 \001(\0132\".multishoot.protocol.LoginRe"
+  "sponseH\000\022I\n\025player_spawn_response\030\002 \001(\0132"
+  "(.multishoot.protocol.PlayerSpawnRespons"
+  "eH\000\022Q\n\031change_direction_response\030\003 \001(\0132,"
+  ".multishoot.protocol.ChangeDirectionResp"
+  "onseH\000\022<\n\016shoot_response\030\004 \001(\0132\".multish"
+  "oot.protocol.ShootResponseH\000\022K\n\026monster_"
+  "spawn_response\030\005 \001(\0132).multishoot.protoc"
+  "ol.MonsterSpawnResponseH\000\022G\n\024monster_hit"
+  "_response\030\006 \001(\0132\'.multishoot.protocol.Mo"
+  "nsterHitResponseH\000\022E\n\023player_hit_respons"
+  "e\030\007 \001(\0132&.multishoot.protocol.PlayerHitR"
+  "esponseH\000\022A\n\021game_end_response\030\010 \001(\0132$.m"
+  "ultishoot.protocol.GameEndResponseH\000\022I\n\025"
+  "player_leave_response\030\t \001(\0132(.multishoot"
+  ".protocol.PlayerLeaveResponseH\000\022:\n\rauth_"
+  "response\030\n \001(\0132!.multishoot.protocol.Aut"
+  "hResponseH\000B\t\n\007payload*\344\001\n\nAuthResult\022\033\n"
+  "\027AUTH_RESULT_UNSPECIFIED\020\000\022\027\n\023AUTH_RESUL"
+  "T_SUCCESS\020\001\022\035\n\031AUTH_RESULT_INVALID_INPUT"
+  "\020\002\022\036\n\032AUTH_RESULT_USERNAME_TAKEN\020\003\022#\n\037AU"
+  "TH_RESULT_INVALID_CREDENTIALS\020\004\022\036\n\032AUTH_"
+  "RESULT_ACCOUNT_IN_USE\020\005\022\034\n\030AUTH_RESULT_S"
+  "ERVER_ERROR\020\006b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_multishoot_2fprotocol_2fgame_2eproto = {
-    false, false, 1818, descriptor_table_protodef_multishoot_2fprotocol_2fgame_2eproto,
+    false, false, 2421, descriptor_table_protodef_multishoot_2fprotocol_2fgame_2eproto,
     "multishoot/protocol/game.proto",
-    &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once, nullptr, 0, 14,
+    &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once, nullptr, 0, 17,
     schemas, file_default_instances, TableStruct_multishoot_2fprotocol_2fgame_2eproto::offsets,
     file_level_metadata_multishoot_2fprotocol_2fgame_2eproto, file_level_enum_descriptors_multishoot_2fprotocol_2fgame_2eproto,
     file_level_service_descriptors_multishoot_2fprotocol_2fgame_2eproto,
@@ -447,6 +537,25 @@ PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_multisho
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_multishoot_2fprotocol_2fgame_2eproto(&descriptor_table_multishoot_2fprotocol_2fgame_2eproto);
 namespace multishoot {
 namespace protocol {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* AuthResult_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_multishoot_2fprotocol_2fgame_2eproto);
+  return file_level_enum_descriptors_multishoot_2fprotocol_2fgame_2eproto[0];
+}
+bool AuthResult_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 // ===================================================================
 
@@ -918,6 +1027,726 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ShootRequest::GetClassData() c
 
 // ===================================================================
 
+class LoginRequest::_Internal {
+ public:
+};
+
+LoginRequest::LoginRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:multishoot.protocol.LoginRequest)
+}
+LoginRequest::LoginRequest(const LoginRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  LoginRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.username_){}
+    , decltype(_impl_.password_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.username_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.username_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_username().empty()) {
+    _this->_impl_.username_.Set(from._internal_username(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.password_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.password_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_password().empty()) {
+    _this->_impl_.password_.Set(from._internal_password(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:multishoot.protocol.LoginRequest)
+}
+
+inline void LoginRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.username_){}
+    , decltype(_impl_.password_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.username_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.username_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.password_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.password_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+LoginRequest::~LoginRequest() {
+  // @@protoc_insertion_point(destructor:multishoot.protocol.LoginRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void LoginRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.username_.Destroy();
+  _impl_.password_.Destroy();
+}
+
+void LoginRequest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void LoginRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:multishoot.protocol.LoginRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.username_.ClearToEmpty();
+  _impl_.password_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* LoginRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string username = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_username();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "multishoot.protocol.LoginRequest.username"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string password = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_password();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "multishoot.protocol.LoginRequest.password"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* LoginRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:multishoot.protocol.LoginRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string username = 1;
+  if (!this->_internal_username().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_username().data(), static_cast<int>(this->_internal_username().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "multishoot.protocol.LoginRequest.username");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_username(), target);
+  }
+
+  // string password = 2;
+  if (!this->_internal_password().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_password().data(), static_cast<int>(this->_internal_password().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "multishoot.protocol.LoginRequest.password");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_password(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:multishoot.protocol.LoginRequest)
+  return target;
+}
+
+size_t LoginRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:multishoot.protocol.LoginRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string username = 1;
+  if (!this->_internal_username().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_username());
+  }
+
+  // string password = 2;
+  if (!this->_internal_password().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_password());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData LoginRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    LoginRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*LoginRequest::GetClassData() const { return &_class_data_; }
+
+
+void LoginRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<LoginRequest*>(&to_msg);
+  auto& from = static_cast<const LoginRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:multishoot.protocol.LoginRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_username().empty()) {
+    _this->_internal_set_username(from._internal_username());
+  }
+  if (!from._internal_password().empty()) {
+    _this->_internal_set_password(from._internal_password());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void LoginRequest::CopyFrom(const LoginRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:multishoot.protocol.LoginRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool LoginRequest::IsInitialized() const {
+  return true;
+}
+
+void LoginRequest::InternalSwap(LoginRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.username_, lhs_arena,
+      &other->_impl_.username_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.password_, lhs_arena,
+      &other->_impl_.password_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata LoginRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[3]);
+}
+
+// ===================================================================
+
+class SignupRequest::_Internal {
+ public:
+};
+
+SignupRequest::SignupRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:multishoot.protocol.SignupRequest)
+}
+SignupRequest::SignupRequest(const SignupRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  SignupRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.username_){}
+    , decltype(_impl_.password_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.username_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.username_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_username().empty()) {
+    _this->_impl_.username_.Set(from._internal_username(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.password_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.password_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_password().empty()) {
+    _this->_impl_.password_.Set(from._internal_password(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:multishoot.protocol.SignupRequest)
+}
+
+inline void SignupRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.username_){}
+    , decltype(_impl_.password_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.username_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.username_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.password_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.password_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+SignupRequest::~SignupRequest() {
+  // @@protoc_insertion_point(destructor:multishoot.protocol.SignupRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void SignupRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.username_.Destroy();
+  _impl_.password_.Destroy();
+}
+
+void SignupRequest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void SignupRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:multishoot.protocol.SignupRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.username_.ClearToEmpty();
+  _impl_.password_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* SignupRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string username = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_username();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "multishoot.protocol.SignupRequest.username"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string password = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_password();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "multishoot.protocol.SignupRequest.password"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* SignupRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:multishoot.protocol.SignupRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string username = 1;
+  if (!this->_internal_username().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_username().data(), static_cast<int>(this->_internal_username().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "multishoot.protocol.SignupRequest.username");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_username(), target);
+  }
+
+  // string password = 2;
+  if (!this->_internal_password().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_password().data(), static_cast<int>(this->_internal_password().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "multishoot.protocol.SignupRequest.password");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_password(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:multishoot.protocol.SignupRequest)
+  return target;
+}
+
+size_t SignupRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:multishoot.protocol.SignupRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string username = 1;
+  if (!this->_internal_username().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_username());
+  }
+
+  // string password = 2;
+  if (!this->_internal_password().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_password());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SignupRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    SignupRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SignupRequest::GetClassData() const { return &_class_data_; }
+
+
+void SignupRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<SignupRequest*>(&to_msg);
+  auto& from = static_cast<const SignupRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:multishoot.protocol.SignupRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_username().empty()) {
+    _this->_internal_set_username(from._internal_username());
+  }
+  if (!from._internal_password().empty()) {
+    _this->_internal_set_password(from._internal_password());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void SignupRequest::CopyFrom(const SignupRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:multishoot.protocol.SignupRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SignupRequest::IsInitialized() const {
+  return true;
+}
+
+void SignupRequest::InternalSwap(SignupRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.username_, lhs_arena,
+      &other->_impl_.username_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.password_, lhs_arena,
+      &other->_impl_.password_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata SignupRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[4]);
+}
+
+// ===================================================================
+
+class AuthResponse::_Internal {
+ public:
+};
+
+AuthResponse::AuthResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:multishoot.protocol.AuthResponse)
+}
+AuthResponse::AuthResponse(const AuthResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  AuthResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.result_){}
+    , decltype(_impl_.best_score_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&_impl_.result_, &from._impl_.result_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.best_score_) -
+    reinterpret_cast<char*>(&_impl_.result_)) + sizeof(_impl_.best_score_));
+  // @@protoc_insertion_point(copy_constructor:multishoot.protocol.AuthResponse)
+}
+
+inline void AuthResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.result_){0}
+    , decltype(_impl_.best_score_){0u}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+AuthResponse::~AuthResponse() {
+  // @@protoc_insertion_point(destructor:multishoot.protocol.AuthResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void AuthResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void AuthResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void AuthResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:multishoot.protocol.AuthResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&_impl_.result_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.best_score_) -
+      reinterpret_cast<char*>(&_impl_.result_)) + sizeof(_impl_.best_score_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* AuthResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .multishoot.protocol.AuthResult result = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_result(static_cast<::multishoot::protocol::AuthResult>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 best_score = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.best_score_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* AuthResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:multishoot.protocol.AuthResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .multishoot.protocol.AuthResult result = 1;
+  if (this->_internal_result() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      1, this->_internal_result(), target);
+  }
+
+  // uint32 best_score = 2;
+  if (this->_internal_best_score() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_best_score(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:multishoot.protocol.AuthResponse)
+  return target;
+}
+
+size_t AuthResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:multishoot.protocol.AuthResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .multishoot.protocol.AuthResult result = 1;
+  if (this->_internal_result() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_result());
+  }
+
+  // uint32 best_score = 2;
+  if (this->_internal_best_score() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_best_score());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData AuthResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    AuthResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*AuthResponse::GetClassData() const { return &_class_data_; }
+
+
+void AuthResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<AuthResponse*>(&to_msg);
+  auto& from = static_cast<const AuthResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:multishoot.protocol.AuthResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_result() != 0) {
+    _this->_internal_set_result(from._internal_result());
+  }
+  if (from._internal_best_score() != 0) {
+    _this->_internal_set_best_score(from._internal_best_score());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void AuthResponse::CopyFrom(const AuthResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:multishoot.protocol.AuthResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AuthResponse::IsInitialized() const {
+  return true;
+}
+
+void AuthResponse::InternalSwap(AuthResponse* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(AuthResponse, _impl_.best_score_)
+      + sizeof(AuthResponse::_impl_.best_score_)
+      - PROTOBUF_FIELD_OFFSET(AuthResponse, _impl_.result_)>(
+          reinterpret_cast<char*>(&_impl_.result_),
+          reinterpret_cast<char*>(&other->_impl_.result_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata AuthResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[5]);
+}
+
+// ===================================================================
+
 class LoginResponse::_Internal {
  public:
 };
@@ -1091,7 +1920,7 @@ void LoginResponse::InternalSwap(LoginResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata LoginResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
-      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[3]);
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[6]);
 }
 
 // ===================================================================
@@ -1384,7 +2213,7 @@ void PlayerSpawnResponse::InternalSwap(PlayerSpawnResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PlayerSpawnResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
-      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[4]);
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[7]);
 }
 
 // ===================================================================
@@ -1649,7 +2478,7 @@ void ChangeDirectionResponse::InternalSwap(ChangeDirectionResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ChangeDirectionResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
-      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[5]);
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[8]);
 }
 
 // ===================================================================
@@ -1873,7 +2702,7 @@ void ShootResponse::InternalSwap(ShootResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ShootResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
-      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[6]);
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[9]);
 }
 
 // ===================================================================
@@ -2125,7 +2954,7 @@ void MonsterSpawnResponse::InternalSwap(MonsterSpawnResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata MonsterSpawnResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
-      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[7]);
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[10]);
 }
 
 // ===================================================================
@@ -2360,7 +3189,7 @@ void MonsterHitResponse::InternalSwap(MonsterHitResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata MonsterHitResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
-      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[8]);
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[11]);
 }
 
 // ===================================================================
@@ -2595,7 +3424,7 @@ void PlayerHitResponse::InternalSwap(PlayerHitResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PlayerHitResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
-      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[9]);
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[12]);
 }
 
 // ===================================================================
@@ -2806,7 +3635,7 @@ void GameEndResponse::InternalSwap(GameEndResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GameEndResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
-      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[10]);
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[13]);
 }
 
 // ===================================================================
@@ -2984,7 +3813,7 @@ void PlayerLeaveResponse::InternalSwap(PlayerLeaveResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PlayerLeaveResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
-      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[11]);
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[14]);
 }
 
 // ===================================================================
@@ -2993,6 +3822,8 @@ class ClientPacket::_Internal {
  public:
   static const ::multishoot::protocol::ChangeDirectionRequest& change_direction_request(const ClientPacket* msg);
   static const ::multishoot::protocol::ShootRequest& shoot_request(const ClientPacket* msg);
+  static const ::multishoot::protocol::LoginRequest& login_request(const ClientPacket* msg);
+  static const ::multishoot::protocol::SignupRequest& signup_request(const ClientPacket* msg);
 };
 
 const ::multishoot::protocol::ChangeDirectionRequest&
@@ -3002,6 +3833,14 @@ ClientPacket::_Internal::change_direction_request(const ClientPacket* msg) {
 const ::multishoot::protocol::ShootRequest&
 ClientPacket::_Internal::shoot_request(const ClientPacket* msg) {
   return *msg->_impl_.payload_.shoot_request_;
+}
+const ::multishoot::protocol::LoginRequest&
+ClientPacket::_Internal::login_request(const ClientPacket* msg) {
+  return *msg->_impl_.payload_.login_request_;
+}
+const ::multishoot::protocol::SignupRequest&
+ClientPacket::_Internal::signup_request(const ClientPacket* msg) {
+  return *msg->_impl_.payload_.signup_request_;
 }
 void ClientPacket::set_allocated_change_direction_request(::multishoot::protocol::ChangeDirectionRequest* change_direction_request) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
@@ -3033,6 +3872,36 @@ void ClientPacket::set_allocated_shoot_request(::multishoot::protocol::ShootRequ
   }
   // @@protoc_insertion_point(field_set_allocated:multishoot.protocol.ClientPacket.shoot_request)
 }
+void ClientPacket::set_allocated_login_request(::multishoot::protocol::LoginRequest* login_request) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_payload();
+  if (login_request) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(login_request);
+    if (message_arena != submessage_arena) {
+      login_request = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, login_request, submessage_arena);
+    }
+    set_has_login_request();
+    _impl_.payload_.login_request_ = login_request;
+  }
+  // @@protoc_insertion_point(field_set_allocated:multishoot.protocol.ClientPacket.login_request)
+}
+void ClientPacket::set_allocated_signup_request(::multishoot::protocol::SignupRequest* signup_request) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_payload();
+  if (signup_request) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(signup_request);
+    if (message_arena != submessage_arena) {
+      signup_request = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, signup_request, submessage_arena);
+    }
+    set_has_signup_request();
+    _impl_.payload_.signup_request_ = signup_request;
+  }
+  // @@protoc_insertion_point(field_set_allocated:multishoot.protocol.ClientPacket.signup_request)
+}
 ClientPacket::ClientPacket(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -3058,6 +3927,16 @@ ClientPacket::ClientPacket(const ClientPacket& from)
     case kShootRequest: {
       _this->_internal_mutable_shoot_request()->::multishoot::protocol::ShootRequest::MergeFrom(
           from._internal_shoot_request());
+      break;
+    }
+    case kLoginRequest: {
+      _this->_internal_mutable_login_request()->::multishoot::protocol::LoginRequest::MergeFrom(
+          from._internal_login_request());
+      break;
+    }
+    case kSignupRequest: {
+      _this->_internal_mutable_signup_request()->::multishoot::protocol::SignupRequest::MergeFrom(
+          from._internal_signup_request());
       break;
     }
     case PAYLOAD_NOT_SET: {
@@ -3114,6 +3993,18 @@ void ClientPacket::clear_payload() {
       }
       break;
     }
+    case kLoginRequest: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete _impl_.payload_.login_request_;
+      }
+      break;
+    }
+    case kSignupRequest: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete _impl_.payload_.signup_request_;
+      }
+      break;
+    }
     case PAYLOAD_NOT_SET: {
       break;
     }
@@ -3150,6 +4041,22 @@ const char* ClientPacket::_InternalParse(const char* ptr, ::_pbi::ParseContext* 
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_shoot_request(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .multishoot.protocol.LoginRequest login_request = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr = ctx->ParseMessage(_internal_mutable_login_request(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .multishoot.protocol.SignupRequest signup_request = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_signup_request(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -3197,6 +4104,20 @@ uint8_t* ClientPacket::_InternalSerialize(
         _Internal::shoot_request(this).GetCachedSize(), target, stream);
   }
 
+  // .multishoot.protocol.LoginRequest login_request = 3;
+  if (_internal_has_login_request()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(3, _Internal::login_request(this),
+        _Internal::login_request(this).GetCachedSize(), target, stream);
+  }
+
+  // .multishoot.protocol.SignupRequest signup_request = 4;
+  if (_internal_has_signup_request()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(4, _Internal::signup_request(this),
+        _Internal::signup_request(this).GetCachedSize(), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3226,6 +4147,20 @@ size_t ClientPacket::ByteSizeLong() const {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *_impl_.payload_.shoot_request_);
+      break;
+    }
+    // .multishoot.protocol.LoginRequest login_request = 3;
+    case kLoginRequest: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *_impl_.payload_.login_request_);
+      break;
+    }
+    // .multishoot.protocol.SignupRequest signup_request = 4;
+    case kSignupRequest: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *_impl_.payload_.signup_request_);
       break;
     }
     case PAYLOAD_NOT_SET: {
@@ -3261,6 +4196,16 @@ void ClientPacket::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::P
           from._internal_shoot_request());
       break;
     }
+    case kLoginRequest: {
+      _this->_internal_mutable_login_request()->::multishoot::protocol::LoginRequest::MergeFrom(
+          from._internal_login_request());
+      break;
+    }
+    case kSignupRequest: {
+      _this->_internal_mutable_signup_request()->::multishoot::protocol::SignupRequest::MergeFrom(
+          from._internal_signup_request());
+      break;
+    }
     case PAYLOAD_NOT_SET: {
       break;
     }
@@ -3289,7 +4234,7 @@ void ClientPacket::InternalSwap(ClientPacket* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ClientPacket::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
-      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[12]);
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[15]);
 }
 
 // ===================================================================
@@ -3305,6 +4250,7 @@ class ServerPacket::_Internal {
   static const ::multishoot::protocol::PlayerHitResponse& player_hit_response(const ServerPacket* msg);
   static const ::multishoot::protocol::GameEndResponse& game_end_response(const ServerPacket* msg);
   static const ::multishoot::protocol::PlayerLeaveResponse& player_leave_response(const ServerPacket* msg);
+  static const ::multishoot::protocol::AuthResponse& auth_response(const ServerPacket* msg);
 };
 
 const ::multishoot::protocol::LoginResponse&
@@ -3342,6 +4288,10 @@ ServerPacket::_Internal::game_end_response(const ServerPacket* msg) {
 const ::multishoot::protocol::PlayerLeaveResponse&
 ServerPacket::_Internal::player_leave_response(const ServerPacket* msg) {
   return *msg->_impl_.payload_.player_leave_response_;
+}
+const ::multishoot::protocol::AuthResponse&
+ServerPacket::_Internal::auth_response(const ServerPacket* msg) {
+  return *msg->_impl_.payload_.auth_response_;
 }
 void ServerPacket::set_allocated_login_response(::multishoot::protocol::LoginResponse* login_response) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
@@ -3478,6 +4428,21 @@ void ServerPacket::set_allocated_player_leave_response(::multishoot::protocol::P
   }
   // @@protoc_insertion_point(field_set_allocated:multishoot.protocol.ServerPacket.player_leave_response)
 }
+void ServerPacket::set_allocated_auth_response(::multishoot::protocol::AuthResponse* auth_response) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_payload();
+  if (auth_response) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(auth_response);
+    if (message_arena != submessage_arena) {
+      auth_response = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, auth_response, submessage_arena);
+    }
+    set_has_auth_response();
+    _impl_.payload_.auth_response_ = auth_response;
+  }
+  // @@protoc_insertion_point(field_set_allocated:multishoot.protocol.ServerPacket.auth_response)
+}
 ServerPacket::ServerPacket(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -3538,6 +4503,11 @@ ServerPacket::ServerPacket(const ServerPacket& from)
     case kPlayerLeaveResponse: {
       _this->_internal_mutable_player_leave_response()->::multishoot::protocol::PlayerLeaveResponse::MergeFrom(
           from._internal_player_leave_response());
+      break;
+    }
+    case kAuthResponse: {
+      _this->_internal_mutable_auth_response()->::multishoot::protocol::AuthResponse::MergeFrom(
+          from._internal_auth_response());
       break;
     }
     case PAYLOAD_NOT_SET: {
@@ -3633,6 +4603,12 @@ void ServerPacket::clear_payload() {
     case kPlayerLeaveResponse: {
       if (GetArenaForAllocation() == nullptr) {
         delete _impl_.payload_.player_leave_response_;
+      }
+      break;
+    }
+    case kAuthResponse: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete _impl_.payload_.auth_response_;
       }
       break;
     }
@@ -3732,6 +4708,14 @@ const char* ServerPacket::_InternalParse(const char* ptr, ::_pbi::ParseContext* 
         } else
           goto handle_unusual;
         continue;
+      // .multishoot.protocol.AuthResponse auth_response = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
+          ptr = ctx->ParseMessage(_internal_mutable_auth_response(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       default:
         goto handle_unusual;
     }  // switch
@@ -3824,6 +4808,13 @@ uint8_t* ServerPacket::_InternalSerialize(
         _Internal::player_leave_response(this).GetCachedSize(), target, stream);
   }
 
+  // .multishoot.protocol.AuthResponse auth_response = 10;
+  if (_internal_has_auth_response()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(10, _Internal::auth_response(this),
+        _Internal::auth_response(this).GetCachedSize(), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3904,6 +4895,13 @@ size_t ServerPacket::ByteSizeLong() const {
           *_impl_.payload_.player_leave_response_);
       break;
     }
+    // .multishoot.protocol.AuthResponse auth_response = 10;
+    case kAuthResponse: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *_impl_.payload_.auth_response_);
+      break;
+    }
     case PAYLOAD_NOT_SET: {
       break;
     }
@@ -3972,6 +4970,11 @@ void ServerPacket::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::P
           from._internal_player_leave_response());
       break;
     }
+    case kAuthResponse: {
+      _this->_internal_mutable_auth_response()->::multishoot::protocol::AuthResponse::MergeFrom(
+          from._internal_auth_response());
+      break;
+    }
     case PAYLOAD_NOT_SET: {
       break;
     }
@@ -4000,7 +5003,7 @@ void ServerPacket::InternalSwap(ServerPacket* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ServerPacket::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_getter, &descriptor_table_multishoot_2fprotocol_2fgame_2eproto_once,
-      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[13]);
+      file_level_metadata_multishoot_2fprotocol_2fgame_2eproto[16]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -4018,6 +5021,18 @@ Arena::CreateMaybeMessage< ::multishoot::protocol::ChangeDirectionRequest >(Aren
 template<> PROTOBUF_NOINLINE ::multishoot::protocol::ShootRequest*
 Arena::CreateMaybeMessage< ::multishoot::protocol::ShootRequest >(Arena* arena) {
   return Arena::CreateMessageInternal< ::multishoot::protocol::ShootRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::multishoot::protocol::LoginRequest*
+Arena::CreateMaybeMessage< ::multishoot::protocol::LoginRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::multishoot::protocol::LoginRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::multishoot::protocol::SignupRequest*
+Arena::CreateMaybeMessage< ::multishoot::protocol::SignupRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::multishoot::protocol::SignupRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::multishoot::protocol::AuthResponse*
+Arena::CreateMaybeMessage< ::multishoot::protocol::AuthResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::multishoot::protocol::AuthResponse >(arena);
 }
 template<> PROTOBUF_NOINLINE ::multishoot::protocol::LoginResponse*
 Arena::CreateMaybeMessage< ::multishoot::protocol::LoginResponse >(Arena* arena) {

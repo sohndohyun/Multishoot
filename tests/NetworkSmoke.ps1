@@ -1,5 +1,6 @@
 param(
-    [string]$ServerPath = "$PSScriptRoot\..\x64\Debug\MultishootServer.exe"
+    [string]$ServerPath = "$PSScriptRoot\..\bld\x64\Debug\MultishootServer.exe",
+    [string]$DatabaseName = 'multishoot_test'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -36,14 +37,82 @@ function New-ShootRequest {
     New-Frame ([byte[]](0x12, 0x00))
 }
 
-function Connect-Player {
+function New-AuthRequest([ValidateSet('Login', 'Signup')][string]$kind,
+                         [string]$username, [string]$password) {
+    $usernameBytes = [Text.Encoding]::ASCII.GetBytes($username)
+    $passwordBytes = [Text.Encoding]::ASCII.GetBytes($password)
+    $request = [Collections.Generic.List[byte]]::new()
+    $request.Add(0x0A)
+    $request.Add([byte]$usernameBytes.Length)
+    $request.AddRange($usernameBytes)
+    $request.Add(0x12)
+    $request.Add([byte]$passwordBytes.Length)
+    $request.AddRange($passwordBytes)
+
+    $body = [Collections.Generic.List[byte]]::new()
+    $body.Add([byte]$(if ($kind -eq 'Login') { 0x1A } else { 0x22 }))
+    $body.Add([byte]$request.Count)
+    $body.AddRange($request)
+    New-Frame ($body.ToArray())
+}
+
+function Connect-Client {
     $client = [System.Net.Sockets.TcpClient]::new('127.0.0.1', 3000)
-    $client.ReceiveTimeout = 1500
-    $body = Read-Frame $client
-    if ($body.Length -eq 0 -or $body[0] -ne 0x0A) {
-        throw 'LoginResponse was not first.'
-    }
+    $client.ReceiveTimeout = 5000
     $client
+}
+
+function Resolve-Docker {
+    $command = Get-Command docker.exe -ErrorAction SilentlyContinue
+    if ($command) { return $command.Source }
+    $fallback = Join-Path $env:LOCALAPPDATA 'Programs\DockerDesktop\resources\bin\docker.exe'
+    if (Test-Path -LiteralPath $fallback) { return $fallback }
+    throw 'Docker CLI was not found.'
+}
+
+function Clear-TestDatabase {
+    $docker = Resolve-Docker
+    & $docker compose exec -T mysql mysql -uroot -pmultishoot_root_dev -D $DatabaseName -e 'TRUNCATE TABLE accounts;' | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw 'Could not clear the network test database.' }
+}
+
+function Start-TestServer {
+    $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
+    $startInfo.FileName = (Resolve-Path $ServerPath)
+    $startInfo.WorkingDirectory = Split-Path $startInfo.FileName
+    $startInfo.Arguments = "--db-name $DatabaseName"
+    $startInfo.UseShellExecute = $false
+    $startInfo.CreateNoWindow = $true
+    $startInfo.RedirectStandardInput = $true
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    [System.Diagnostics.Process]::Start($startInfo)
+}
+
+function Stop-TestServer([System.Diagnostics.Process]$process) {
+    if (-not $process -or $process.HasExited) { return }
+    $process.StandardInput.WriteLine('quit')
+    if (-not $process.WaitForExit(5000)) { $process.Kill() }
+    $process.Dispose()
+}
+
+function Invoke-Auth([System.Net.Sockets.TcpClient]$client,
+                     [ValidateSet('Login', 'Signup')][string]$kind,
+                     [string]$username, [string]$password, [int]$expected) {
+    $request = New-AuthRequest $kind $username $password
+    $client.GetStream().Write($request, 0, $request.Length)
+    $body = Read-Frame $client
+    if ($body.Length -ne 4 -or $body[0] -ne 0x52 -or $body[2] -ne 0x08 -or
+        $body[3] -ne $expected) {
+        throw "Unexpected auth result for ${kind}/${username}: $($body -join ',')"
+    }
+
+    if ($expected -eq 1) {
+        $join = Read-Frame $client
+        if ($join.Length -eq 0 -or $join[0] -ne 0x0A) {
+            throw 'LoginResponse did not follow successful authentication.'
+        }
+    }
 }
 
 function Drain-Cases([System.Net.Sockets.TcpClient]$client) {
@@ -55,15 +124,8 @@ function Drain-Cases([System.Net.Sockets.TcpClient]$client) {
     $cases
 }
 
-$startInfo = [System.Diagnostics.ProcessStartInfo]::new()
-$startInfo.FileName = (Resolve-Path $ServerPath)
-$startInfo.WorkingDirectory = Split-Path $startInfo.FileName
-$startInfo.UseShellExecute = $false
-$startInfo.CreateNoWindow = $true
-$startInfo.RedirectStandardInput = $true
-$startInfo.RedirectStandardOutput = $true
-$startInfo.RedirectStandardError = $true
-$server = [System.Diagnostics.Process]::Start($startInfo)
+Clear-TestDatabase
+$server = Start-TestServer
 
 try {
     Start-Sleep -Milliseconds 300
@@ -77,8 +139,52 @@ try {
     $bad.Close()
     if ($server.HasExited) { throw 'Server crashed on oversized frame.' }
 
-    $a = Connect-Player
-    $b = Connect-Player
+    $unauthenticated = Connect-Client
+    Start-Sleep -Milliseconds 150
+    if ($unauthenticated.Available -ne 0) {
+        throw 'Server created a player before authentication.'
+    }
+    $shoot = New-ShootRequest
+    $unauthenticated.GetStream().Write($shoot, 0, $shoot.Length)
+    Start-Sleep -Milliseconds 100
+    if ($unauthenticated.Available -ne 0) {
+        throw 'Unauthenticated game request produced a response.'
+    }
+    Invoke-Auth $unauthenticated Signup 'ab' 'password1' 2
+
+    $a = $unauthenticated
+    Invoke-Auth $a Signup 'player_a' 'password1' 1
+
+    $duplicate = Connect-Client
+    Invoke-Auth $duplicate Signup 'player_a' 'password1' 3
+
+    $wrong = Connect-Client
+    Invoke-Auth $wrong Login 'player_a' 'wrongpass' 4
+
+    $inUse = Connect-Client
+    Invoke-Auth $inUse Login 'player_a' 'password1' 5
+
+    $a.Close()
+    $a = $null
+    Start-Sleep -Milliseconds 200
+
+    if ($b) { $b.Close() }
+    $b = $null
+    if ($duplicate) { $duplicate.Close() }
+    $duplicate = $null
+    if ($wrong) { $wrong.Close() }
+    $wrong = $null
+    if ($inUse) { $inUse.Close() }
+    $inUse = $null
+    $unauthenticated = $null
+    Stop-TestServer $server
+    $server = Start-TestServer
+    Start-Sleep -Milliseconds 300
+    $a = Connect-Client
+    Invoke-Auth $a Login 'player_a' 'password1' 1
+
+    $b = Connect-Client
+    Invoke-Auth $b Signup 'player_b' 'password2' 1
     Start-Sleep -Milliseconds 150
     [void](Drain-Cases $a)
     [void](Drain-Cases $b)
@@ -91,7 +197,6 @@ try {
     if ((Drain-Cases $a) -contains 4) { throw 'Malformed protobuf produced a shot.' }
     if ($server.HasExited) { throw 'Server crashed on malformed protobuf.' }
 
-    $shoot = New-ShootRequest
     $a.GetStream().Write($shoot, 0, $shoot.Length)
     $a.GetStream().Write($shoot, 0, $shoot.Length)
     Start-Sleep -Milliseconds 100
@@ -119,15 +224,18 @@ try {
 
     'PASS oversized-frame disconnect'
     'PASS malformed-protobuf rejection'
+    'PASS authentication gate and validation'
+    'PASS duplicate and concurrent account rejection'
+    'PASS account reuse after disconnect'
     'PASS authoritative shoot cooldown'
     'PASS fragmented protobuf frame reassembly'
 }
 finally {
     if ($a) { $a.Close() }
     if ($b) { $b.Close() }
-    if (-not $server.HasExited) {
-        $server.StandardInput.WriteLine('quit')
-        if (-not $server.WaitForExit(5000)) { $server.Kill() }
-    }
-    $server.Dispose()
+    if ($duplicate) { $duplicate.Close() }
+    if ($wrong) { $wrong.Close() }
+    if ($inUse) { $inUse.Close() }
+    if ($unauthenticated -and $unauthenticated -ne $a) { $unauthenticated.Close() }
+    Stop-TestServer $server
 }

@@ -178,6 +178,7 @@
     <ClCompile Include="engine\game_manager.cpp" />
     <ClCompile Include="engine\game_object.cpp" />
     <ClCompile Include="engine\graphics.cpp" />
+    <ClCompile Include="scenes\auth_scene.cpp" />
     <ClCompile Include="scenes\hello_world.cpp" />
     <ClCompile Include="engine\input.cpp" />
     <ClCompile Include="scenes\lobby_scene.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="engine\game_manager.hpp" />
     <ClInclude Include="engine\game_object.hpp" />
     <ClInclude Include="engine\graphics.hpp" />
+    <ClInclude Include="scenes\auth_scene.hpp" />
     <ClInclude Include="scenes\hello_world.hpp" />
     <ClInclude Include="engine\input.hpp" />
     <ClInclude Include="scenes\lobby_scene.hpp" />

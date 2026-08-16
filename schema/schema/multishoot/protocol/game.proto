@@ -13,6 +13,31 @@ message ChangeDirectionRequest {
 
 message ShootRequest {}
 
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message SignupRequest {
+  string username = 1;
+  string password = 2;
+}
+
+enum AuthResult {
+  AUTH_RESULT_UNSPECIFIED = 0;
+  AUTH_RESULT_SUCCESS = 1;
+  AUTH_RESULT_INVALID_INPUT = 2;
+  AUTH_RESULT_USERNAME_TAKEN = 3;
+  AUTH_RESULT_INVALID_CREDENTIALS = 4;
+  AUTH_RESULT_ACCOUNT_IN_USE = 5;
+  AUTH_RESULT_SERVER_ERROR = 6;
+}
+
+message AuthResponse {
+  AuthResult result = 1;
+  uint32 best_score = 2;
+}
+
 message LoginResponse {
   uint32 player_id = 1;
 }
@@ -66,6 +91,8 @@ message ClientPacket {
   oneof payload {
     ChangeDirectionRequest change_direction_request = 1;
     ShootRequest shoot_request = 2;
+    LoginRequest login_request = 3;
+    SignupRequest signup_request = 4;
   }
 }
 
@@ -80,5 +107,6 @@ message ServerPacket {
     PlayerHitResponse player_hit_response = 7;
     GameEndResponse game_end_response = 8;
     PlayerLeaveResponse player_leave_response = 9;
+    AuthResponse auth_response = 10;
   }
 }

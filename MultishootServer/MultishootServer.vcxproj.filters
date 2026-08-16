@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="database"><UniqueIdentifier>{9A0EAB07-92A6-4C2D-9D54-6E5C8D6E7D1D}</UniqueIdentifier></Filter>
     <Filter Include="game"><UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier></Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="database\database_worker.cpp"><Filter>database</Filter></ClCompile>
     <ClCompile Include="game\multi_shoot.cpp"><Filter>game</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="database\database_worker.hpp"><Filter>database</Filter></ClInclude>
     <ClInclude Include="game\multi_shoot.hpp"><Filter>game</Filter></ClInclude>
   </ItemGroup>
 </Project>

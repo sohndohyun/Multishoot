@@ -52,7 +52,7 @@ int client::init(const char* ip, int port) {
         end();
         return 5;
     }
-    address_.sin_port = htons(port_);
+    address_.sin_port = htons(port);
 
     this->port_ = port;
     is_initialized_ = true;

@@ -98,12 +98,14 @@ void game_manager::main_loop() {
     while (!quit_) {
         current_time_ = SDL_GetTicks64();
         graphics_->clear();
+        input_->begin_frame();
         while (SDL_PollEvent(&ev) != 0) {
             switch (ev.type) {
             case SDL_QUIT:
                 quit_ = true;
                 break;
             default:
+                input_->handle_event(ev);
                 break;
             }
         }

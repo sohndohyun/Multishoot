@@ -24,6 +24,7 @@
     <ClCompile Include="controllers\multi_controller.cpp"><Filter>controllers</Filter></ClCompile>
     <ClCompile Include="controllers\multi_shoot_client.cpp"><Filter>controllers</Filter></ClCompile>
     <ClCompile Include="controllers\single_controller.cpp"><Filter>controllers</Filter></ClCompile>
+    <ClCompile Include="scenes\auth_scene.cpp"><Filter>scenes</Filter></ClCompile>
     <ClCompile Include="scenes\hello_world.cpp"><Filter>scenes</Filter></ClCompile>
     <ClCompile Include="scenes\lobby_scene.cpp"><Filter>scenes</Filter></ClCompile>
   </ItemGroup>
@@ -43,6 +44,7 @@
     <ClInclude Include="controllers\multi_controller.hpp"><Filter>controllers</Filter></ClInclude>
     <ClInclude Include="controllers\multi_shoot_client.hpp"><Filter>controllers</Filter></ClInclude>
     <ClInclude Include="controllers\single_controller.hpp"><Filter>controllers</Filter></ClInclude>
+    <ClInclude Include="scenes\auth_scene.hpp"><Filter>scenes</Filter></ClInclude>
     <ClInclude Include="scenes\hello_world.hpp"><Filter>scenes</Filter></ClInclude>
     <ClInclude Include="scenes\lobby_scene.hpp"><Filter>scenes</Filter></ClInclude>
   </ItemGroup>

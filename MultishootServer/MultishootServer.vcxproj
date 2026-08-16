@@ -98,8 +98,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files\MySQL\MySQL Server 8.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files\MySQL\MySQL Server 8.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -177,9 +175,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="database\database_worker.cpp" />
     <ClCompile Include="game\multi_shoot.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="database\database_worker.hpp" />
     <ClInclude Include="game\multi_shoot.hpp" />
   </ItemGroup>
   <ItemGroup>

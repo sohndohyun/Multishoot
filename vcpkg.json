@@ -3,6 +3,7 @@
   "version-string": "1.0.0",
   "builtin-baseline": "e55144c5a465b53bc71bd0b59111ea0b8bb039a5",
   "dependencies": [
+    "libmysql",
     "protobuf",
     "sdl2",
     "sdl2-ttf"
