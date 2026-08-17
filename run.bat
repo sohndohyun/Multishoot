@@ -7,6 +7,9 @@ set "bin=%~dp0build\x64\%configuration%"
 set "server_bin=%bin%\MultishootServer"
 set "client_bin=%bin%\Multishoot"
 set "test_bin=%bin%\MultishootCommonTests"
+set "vcpkg_bin=%~dp0vcpkg_installed\x64-windows\x64-windows\bin"
+if /i "%configuration%"=="Debug" set "vcpkg_bin=%~dp0vcpkg_installed\x64-windows\x64-windows\debug\bin"
+set "PATH=%vcpkg_bin%;%PATH%"
 
 if "%~1"=="" set "menu=1" & goto menu
 if /i "%~1"=="server" goto server
@@ -20,7 +23,9 @@ echo Usage: %~nx0 ^<server^|client^|test^|db-up^|db-down^|db-reset^> [Debug^|Rel
 exit /b 2
 
 :menu
-choice /c SCT /n /m "Select [S]erver, [C]lient, or [T]est: "
+choice /c SCTUD /n /m "Select [S]erver, [C]lient, [T]est, db-[U]p, or db-[D]own: "
+if errorlevel 5 goto db_down
+if errorlevel 4 goto db_up
 if errorlevel 3 goto test
 if errorlevel 2 goto client
 goto server

@@ -1,6 +1,8 @@
 param(
     [string]$ServerPath = "$PSScriptRoot\..\build\x64\Debug\MultishootServer\MultishootServer.exe",
-    [string]$DatabaseName = 'multishoot_test'
+    [string]$DatabaseName = 'multishoot_test',
+    [int]$Port = 3000,
+    [switch]$LeaderboardOnly
 )
 
 $ErrorActionPreference = 'Stop'
@@ -37,6 +39,76 @@ function New-ShootRequest {
     New-Frame ([byte[]](0x12, 0x00))
 }
 
+function New-LeaderboardRequest([int]$page) {
+    if ($page -eq 0) { return New-Frame ([byte[]](0x2A, 0x00)) }
+    New-Frame ([byte[]](0x2A, 0x02, 0x08, [byte]$page))
+}
+
+function Read-Varint([byte[]]$bytes, [ref]$offset) {
+    [uint64]$value = 0
+    for ($shift = 0; $shift -lt 64; $shift += 7) {
+        $current = $bytes[$offset.Value]
+        ++$offset.Value
+        $value = $value -bor ([uint64]($current -band 0x7F) -shl $shift)
+        if (($current -band 0x80) -eq 0) { return $value }
+    }
+    throw 'Invalid protobuf varint.'
+}
+
+function Read-LeaderboardEntry([byte[]]$bytes, [ref]$offset, [int]$end) {
+    $rank = 0
+    $username = ''
+    $score = 0
+    while ($offset.Value -lt $end) {
+        $field = (Read-Varint $bytes $offset) -shr 3
+        switch ($field) {
+            1 { $rank = Read-Varint $bytes $offset }
+            2 {
+                $length = Read-Varint $bytes $offset
+                $username = [Text.Encoding]::UTF8.GetString($bytes, $offset.Value, $length)
+                $offset.Value += $length
+            }
+            3 { $score = Read-Varint $bytes $offset }
+            default { throw "Unexpected leaderboard entry field: $field" }
+        }
+    }
+    [PSCustomObject]@{ Rank = $rank; Username = $username; Score = $score }
+}
+
+function Read-Leaderboard([System.Net.Sockets.TcpClient]$client) {
+    $bytes = Read-Frame $client
+    $offset = 0
+    if ((Read-Varint $bytes ([ref]$offset)) -ne 90) {
+        throw "Unexpected leaderboard packet: $($bytes -join ',')"
+    }
+    $length = Read-Varint $bytes ([ref]$offset)
+    $end = $offset + $length
+    $page = 0
+    $entries = [Collections.Generic.List[object]]::new()
+    $hasNextPage = $false
+    $success = $false
+    while ($offset -lt $end) {
+        $field = (Read-Varint $bytes ([ref]$offset)) -shr 3
+        switch ($field) {
+            1 { $page = Read-Varint $bytes ([ref]$offset) }
+            2 {
+                $entryLength = Read-Varint $bytes ([ref]$offset)
+                $entryEnd = $offset + $entryLength
+                $entries.Add((Read-LeaderboardEntry $bytes ([ref]$offset) $entryEnd))
+            }
+            3 { $hasNextPage = (Read-Varint $bytes ([ref]$offset)) -ne 0 }
+            4 { $success = (Read-Varint $bytes ([ref]$offset)) -ne 0 }
+            default { throw "Unexpected leaderboard response field: $field" }
+        }
+    }
+    [PSCustomObject]@{
+        Page = $page
+        Entries = $entries.ToArray()
+        HasNextPage = $hasNextPage
+        Success = $success
+    }
+}
+
 function New-AuthRequest([ValidateSet('Login', 'Signup')][string]$kind,
                          [string]$username, [string]$password) {
     $usernameBytes = [Text.Encoding]::ASCII.GetBytes($username)
@@ -57,9 +129,22 @@ function New-AuthRequest([ValidateSet('Login', 'Signup')][string]$kind,
 }
 
 function Connect-Client {
-    $client = [System.Net.Sockets.TcpClient]::new('127.0.0.1', 3000)
+    $client = [System.Net.Sockets.TcpClient]::new('127.0.0.1', $Port)
     $client.ReceiveTimeout = 5000
     $client
+}
+
+function Seed-Leaderboard {
+    $docker = Resolve-Docker
+    $values = for ($rank = 1; $rank -le 12; ++$rank) {
+        $username = 'rank_{0:d2}' -f $rank
+        $score = 120 - $rank
+        "('$username', UNHEX(REPEAT('00', 16)), UNHEX(REPEAT('00', 32)), $score)"
+    }
+    $sql = 'INSERT INTO accounts (username, password_salt, password_hash, best_score) VALUES ' +
+        ($values -join ',') + ';'
+    & $docker compose exec -T mysql mysql -uroot -pmultishoot_root_dev -D $DatabaseName -e $sql | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw 'Could not seed the leaderboard.' }
 }
 
 function Resolve-Docker {
@@ -95,7 +180,7 @@ function Start-TestServer {
     $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
     $startInfo.FileName = (Resolve-Path $ServerPath)
     $startInfo.WorkingDirectory = Split-Path $startInfo.FileName
-    $startInfo.Arguments = "--db-name $DatabaseName"
+    $startInfo.Arguments = "--port $Port --db-name $DatabaseName"
     $startInfo.UseShellExecute = $false
     $startInfo.CreateNoWindow = $true
     $startInfo.RedirectStandardInput = $true
@@ -145,6 +230,7 @@ function Drain-Cases([System.Net.Sockets.TcpClient]$client) {
 }
 
 Clear-TestDatabase
+Seed-Leaderboard
 $server = Start-TestServer
 
 try {
@@ -158,6 +244,34 @@ try {
     Start-Sleep -Milliseconds 200
     $bad.Close()
     if ($server.HasExited) { throw 'Server crashed on oversized frame.' }
+
+    $leaderboard = Connect-Client
+    $request = New-LeaderboardRequest 0
+    $leaderboard.GetStream().Write($request, 0, $request.Length)
+    $firstPage = Read-Leaderboard $leaderboard
+    if (-not $firstPage.Success -or $firstPage.Page -ne 0 -or
+        $firstPage.Entries.Count -ne 10 -or -not $firstPage.HasNextPage -or
+        $firstPage.Entries[0].Rank -ne 1 -or $firstPage.Entries[0].Username -ne 'rank_01' -or
+        $firstPage.Entries[0].Score -ne 119 -or $firstPage.Entries[9].Rank -ne 10 -or
+        $firstPage.Entries[9].Username -ne 'rank_10' -or $firstPage.Entries[9].Score -ne 110) {
+        throw "Unexpected first leaderboard page: $($firstPage | ConvertTo-Json -Compress -Depth 3)"
+    }
+    $request = New-LeaderboardRequest 1
+    $leaderboard.GetStream().Write($request, 0, $request.Length)
+    $secondPage = Read-Leaderboard $leaderboard
+    if (-not $secondPage.Success -or $secondPage.Page -ne 1 -or
+        $secondPage.Entries.Count -ne 2 -or $secondPage.HasNextPage -or
+        $secondPage.Entries[0].Rank -ne 11 -or $secondPage.Entries[0].Username -ne 'rank_11' -or
+        $secondPage.Entries[0].Score -ne 109 -or $secondPage.Entries[1].Rank -ne 12 -or
+        $secondPage.Entries[1].Username -ne 'rank_12' -or $secondPage.Entries[1].Score -ne 108) {
+        throw "Unexpected second leaderboard page: $($secondPage | ConvertTo-Json -Compress -Depth 3)"
+    }
+    $leaderboard.Close()
+    $leaderboard = $null
+    if ($LeaderboardOnly) {
+        'PASS leaderboard ordering and pagination'
+        return
+    }
 
     $unauthenticated = Connect-Client
     Start-Sleep -Milliseconds 150
@@ -268,6 +382,7 @@ try {
     'PASS oversized-frame disconnect'
     'PASS malformed-protobuf rejection'
     'PASS authentication gate and validation'
+    'PASS leaderboard ordering and pagination'
     'PASS duplicate and concurrent account rejection'
     'PASS account reuse after disconnect'
     'PASS authoritative shoot cooldown'
@@ -281,6 +396,7 @@ finally {
     if ($duplicate) { $duplicate.Close() }
     if ($wrong) { $wrong.Close() }
     if ($inUse) { $inUse.Close() }
+    if ($leaderboard) { $leaderboard.Close() }
     if ($unauthenticated -and $unauthenticated -ne $a) { $unauthenticated.Close() }
     Stop-TestServer $server
 }

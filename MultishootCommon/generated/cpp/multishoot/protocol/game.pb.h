@@ -63,6 +63,15 @@ extern ClientPacketDefaultTypeInternal _ClientPacket_default_instance_;
 class GameEndResponse;
 struct GameEndResponseDefaultTypeInternal;
 extern GameEndResponseDefaultTypeInternal _GameEndResponse_default_instance_;
+class LeaderboardEntry;
+struct LeaderboardEntryDefaultTypeInternal;
+extern LeaderboardEntryDefaultTypeInternal _LeaderboardEntry_default_instance_;
+class LeaderboardRequest;
+struct LeaderboardRequestDefaultTypeInternal;
+extern LeaderboardRequestDefaultTypeInternal _LeaderboardRequest_default_instance_;
+class LeaderboardResponse;
+struct LeaderboardResponseDefaultTypeInternal;
+extern LeaderboardResponseDefaultTypeInternal _LeaderboardResponse_default_instance_;
 class LoginRequest;
 struct LoginRequestDefaultTypeInternal;
 extern LoginRequestDefaultTypeInternal _LoginRequest_default_instance_;
@@ -107,6 +116,9 @@ template<> ::multishoot::protocol::ChangeDirectionRequest* Arena::CreateMaybeMes
 template<> ::multishoot::protocol::ChangeDirectionResponse* Arena::CreateMaybeMessage<::multishoot::protocol::ChangeDirectionResponse>(Arena*);
 template<> ::multishoot::protocol::ClientPacket* Arena::CreateMaybeMessage<::multishoot::protocol::ClientPacket>(Arena*);
 template<> ::multishoot::protocol::GameEndResponse* Arena::CreateMaybeMessage<::multishoot::protocol::GameEndResponse>(Arena*);
+template<> ::multishoot::protocol::LeaderboardEntry* Arena::CreateMaybeMessage<::multishoot::protocol::LeaderboardEntry>(Arena*);
+template<> ::multishoot::protocol::LeaderboardRequest* Arena::CreateMaybeMessage<::multishoot::protocol::LeaderboardRequest>(Arena*);
+template<> ::multishoot::protocol::LeaderboardResponse* Arena::CreateMaybeMessage<::multishoot::protocol::LeaderboardResponse>(Arena*);
 template<> ::multishoot::protocol::LoginRequest* Arena::CreateMaybeMessage<::multishoot::protocol::LoginRequest>(Arena*);
 template<> ::multishoot::protocol::LoginResponse* Arena::CreateMaybeMessage<::multishoot::protocol::LoginResponse>(Arena*);
 template<> ::multishoot::protocol::MonsterHitResponse* Arena::CreateMaybeMessage<::multishoot::protocol::MonsterHitResponse>(Arena*);
@@ -927,6 +939,519 @@ class SignupRequest final :
 };
 // -------------------------------------------------------------------
 
+class LeaderboardRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:multishoot.protocol.LeaderboardRequest) */ {
+ public:
+  inline LeaderboardRequest() : LeaderboardRequest(nullptr) {}
+  ~LeaderboardRequest() override;
+  explicit PROTOBUF_CONSTEXPR LeaderboardRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  LeaderboardRequest(const LeaderboardRequest& from);
+  LeaderboardRequest(LeaderboardRequest&& from) noexcept
+    : LeaderboardRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline LeaderboardRequest& operator=(const LeaderboardRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline LeaderboardRequest& operator=(LeaderboardRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const LeaderboardRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const LeaderboardRequest* internal_default_instance() {
+    return reinterpret_cast<const LeaderboardRequest*>(
+               &_LeaderboardRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(LeaderboardRequest& a, LeaderboardRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(LeaderboardRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(LeaderboardRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  LeaderboardRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<LeaderboardRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const LeaderboardRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const LeaderboardRequest& from) {
+    LeaderboardRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(LeaderboardRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "multishoot.protocol.LeaderboardRequest";
+  }
+  protected:
+  explicit LeaderboardRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPageFieldNumber = 1,
+  };
+  // uint32 page = 1;
+  void clear_page();
+  uint32_t page() const;
+  void set_page(uint32_t value);
+  private:
+  uint32_t _internal_page() const;
+  void _internal_set_page(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:multishoot.protocol.LeaderboardRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t page_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_multishoot_2fprotocol_2fgame_2eproto;
+};
+// -------------------------------------------------------------------
+
+class LeaderboardEntry final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:multishoot.protocol.LeaderboardEntry) */ {
+ public:
+  inline LeaderboardEntry() : LeaderboardEntry(nullptr) {}
+  ~LeaderboardEntry() override;
+  explicit PROTOBUF_CONSTEXPR LeaderboardEntry(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  LeaderboardEntry(const LeaderboardEntry& from);
+  LeaderboardEntry(LeaderboardEntry&& from) noexcept
+    : LeaderboardEntry() {
+    *this = ::std::move(from);
+  }
+
+  inline LeaderboardEntry& operator=(const LeaderboardEntry& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline LeaderboardEntry& operator=(LeaderboardEntry&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const LeaderboardEntry& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const LeaderboardEntry* internal_default_instance() {
+    return reinterpret_cast<const LeaderboardEntry*>(
+               &_LeaderboardEntry_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  friend void swap(LeaderboardEntry& a, LeaderboardEntry& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(LeaderboardEntry* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(LeaderboardEntry* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  LeaderboardEntry* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<LeaderboardEntry>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const LeaderboardEntry& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const LeaderboardEntry& from) {
+    LeaderboardEntry::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(LeaderboardEntry* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "multishoot.protocol.LeaderboardEntry";
+  }
+  protected:
+  explicit LeaderboardEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUsernameFieldNumber = 2,
+    kRankFieldNumber = 1,
+    kScoreFieldNumber = 3,
+  };
+  // string username = 2;
+  void clear_username();
+  const std::string& username() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_username(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_username();
+  PROTOBUF_NODISCARD std::string* release_username();
+  void set_allocated_username(std::string* username);
+  private:
+  const std::string& _internal_username() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_username(const std::string& value);
+  std::string* _internal_mutable_username();
+  public:
+
+  // uint64 rank = 1;
+  void clear_rank();
+  uint64_t rank() const;
+  void set_rank(uint64_t value);
+  private:
+  uint64_t _internal_rank() const;
+  void _internal_set_rank(uint64_t value);
+  public:
+
+  // uint32 score = 3;
+  void clear_score();
+  uint32_t score() const;
+  void set_score(uint32_t value);
+  private:
+  uint32_t _internal_score() const;
+  void _internal_set_score(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:multishoot.protocol.LeaderboardEntry)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr username_;
+    uint64_t rank_;
+    uint32_t score_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_multishoot_2fprotocol_2fgame_2eproto;
+};
+// -------------------------------------------------------------------
+
+class LeaderboardResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:multishoot.protocol.LeaderboardResponse) */ {
+ public:
+  inline LeaderboardResponse() : LeaderboardResponse(nullptr) {}
+  ~LeaderboardResponse() override;
+  explicit PROTOBUF_CONSTEXPR LeaderboardResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  LeaderboardResponse(const LeaderboardResponse& from);
+  LeaderboardResponse(LeaderboardResponse&& from) noexcept
+    : LeaderboardResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline LeaderboardResponse& operator=(const LeaderboardResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline LeaderboardResponse& operator=(LeaderboardResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const LeaderboardResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const LeaderboardResponse* internal_default_instance() {
+    return reinterpret_cast<const LeaderboardResponse*>(
+               &_LeaderboardResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  friend void swap(LeaderboardResponse& a, LeaderboardResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(LeaderboardResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(LeaderboardResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  LeaderboardResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<LeaderboardResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const LeaderboardResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const LeaderboardResponse& from) {
+    LeaderboardResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(LeaderboardResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "multishoot.protocol.LeaderboardResponse";
+  }
+  protected:
+  explicit LeaderboardResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kEntriesFieldNumber = 2,
+    kPageFieldNumber = 1,
+    kHasNextPageFieldNumber = 3,
+    kSuccessFieldNumber = 4,
+  };
+  // repeated .multishoot.protocol.LeaderboardEntry entries = 2;
+  int entries_size() const;
+  private:
+  int _internal_entries_size() const;
+  public:
+  void clear_entries();
+  ::multishoot::protocol::LeaderboardEntry* mutable_entries(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::multishoot::protocol::LeaderboardEntry >*
+      mutable_entries();
+  private:
+  const ::multishoot::protocol::LeaderboardEntry& _internal_entries(int index) const;
+  ::multishoot::protocol::LeaderboardEntry* _internal_add_entries();
+  public:
+  const ::multishoot::protocol::LeaderboardEntry& entries(int index) const;
+  ::multishoot::protocol::LeaderboardEntry* add_entries();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::multishoot::protocol::LeaderboardEntry >&
+      entries() const;
+
+  // uint32 page = 1;
+  void clear_page();
+  uint32_t page() const;
+  void set_page(uint32_t value);
+  private:
+  uint32_t _internal_page() const;
+  void _internal_set_page(uint32_t value);
+  public:
+
+  // bool has_next_page = 3;
+  void clear_has_next_page();
+  bool has_next_page() const;
+  void set_has_next_page(bool value);
+  private:
+  bool _internal_has_next_page() const;
+  void _internal_set_has_next_page(bool value);
+  public:
+
+  // bool success = 4;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:multishoot.protocol.LeaderboardResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::multishoot::protocol::LeaderboardEntry > entries_;
+    uint32_t page_;
+    bool has_next_page_;
+    bool success_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_multishoot_2fprotocol_2fgame_2eproto;
+};
+// -------------------------------------------------------------------
+
 class AuthResponse final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:multishoot.protocol.AuthResponse) */ {
  public:
@@ -975,7 +1500,7 @@ class AuthResponse final :
                &_AuthResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    8;
 
   friend void swap(AuthResponse& a, AuthResponse& b) {
     a.Swap(&b);
@@ -1134,7 +1659,7 @@ class LoginResponse final :
                &_LoginResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    9;
 
   friend void swap(LoginResponse& a, LoginResponse& b) {
     a.Swap(&b);
@@ -1282,7 +1807,7 @@ class PlayerSpawnResponse final :
                &_PlayerSpawnResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    10;
 
   friend void swap(PlayerSpawnResponse& a, PlayerSpawnResponse& b) {
     a.Swap(&b);
@@ -1481,7 +2006,7 @@ class ChangeDirectionResponse final :
                &_ChangeDirectionResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    11;
 
   friend void swap(ChangeDirectionResponse& a, ChangeDirectionResponse& b) {
     a.Swap(&b);
@@ -1669,7 +2194,7 @@ class ShootResponse final :
                &_ShootResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    12;
 
   friend void swap(ShootResponse& a, ShootResponse& b) {
     a.Swap(&b);
@@ -1837,7 +2362,7 @@ class MonsterSpawnResponse final :
                &_MonsterSpawnResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    13;
 
   friend void swap(MonsterSpawnResponse& a, MonsterSpawnResponse& b) {
     a.Swap(&b);
@@ -2016,7 +2541,7 @@ class MonsterHitResponse final :
                &_MonsterHitResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    14;
 
   friend void swap(MonsterHitResponse& a, MonsterHitResponse& b) {
     a.Swap(&b);
@@ -2186,7 +2711,7 @@ class PlayerHitResponse final :
                &_PlayerHitResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    15;
 
   friend void swap(PlayerHitResponse& a, PlayerHitResponse& b) {
     a.Swap(&b);
@@ -2356,7 +2881,7 @@ class GameEndResponse final :
                &_GameEndResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    16;
 
   friend void swap(GameEndResponse& a, GameEndResponse& b) {
     a.Swap(&b);
@@ -2515,7 +3040,7 @@ class PlayerLeaveResponse final :
                &_PlayerLeaveResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    17;
 
   friend void swap(PlayerLeaveResponse& a, PlayerLeaveResponse& b) {
     a.Swap(&b);
@@ -2663,6 +3188,7 @@ class ClientPacket final :
     kShootRequest = 2,
     kLoginRequest = 3,
     kSignupRequest = 4,
+    kLeaderboardRequest = 5,
     PAYLOAD_NOT_SET = 0,
   };
 
@@ -2671,7 +3197,7 @@ class ClientPacket final :
                &_ClientPacket_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    18;
 
   friend void swap(ClientPacket& a, ClientPacket& b) {
     a.Swap(&b);
@@ -2748,6 +3274,7 @@ class ClientPacket final :
     kShootRequestFieldNumber = 2,
     kLoginRequestFieldNumber = 3,
     kSignupRequestFieldNumber = 4,
+    kLeaderboardRequestFieldNumber = 5,
   };
   // .multishoot.protocol.ChangeDirectionRequest change_direction_request = 1;
   bool has_change_direction_request() const;
@@ -2821,6 +3348,24 @@ class ClientPacket final :
       ::multishoot::protocol::SignupRequest* signup_request);
   ::multishoot::protocol::SignupRequest* unsafe_arena_release_signup_request();
 
+  // .multishoot.protocol.LeaderboardRequest leaderboard_request = 5;
+  bool has_leaderboard_request() const;
+  private:
+  bool _internal_has_leaderboard_request() const;
+  public:
+  void clear_leaderboard_request();
+  const ::multishoot::protocol::LeaderboardRequest& leaderboard_request() const;
+  PROTOBUF_NODISCARD ::multishoot::protocol::LeaderboardRequest* release_leaderboard_request();
+  ::multishoot::protocol::LeaderboardRequest* mutable_leaderboard_request();
+  void set_allocated_leaderboard_request(::multishoot::protocol::LeaderboardRequest* leaderboard_request);
+  private:
+  const ::multishoot::protocol::LeaderboardRequest& _internal_leaderboard_request() const;
+  ::multishoot::protocol::LeaderboardRequest* _internal_mutable_leaderboard_request();
+  public:
+  void unsafe_arena_set_allocated_leaderboard_request(
+      ::multishoot::protocol::LeaderboardRequest* leaderboard_request);
+  ::multishoot::protocol::LeaderboardRequest* unsafe_arena_release_leaderboard_request();
+
   void clear_payload();
   PayloadCase payload_case() const;
   // @@protoc_insertion_point(class_scope:multishoot.protocol.ClientPacket)
@@ -2830,6 +3375,7 @@ class ClientPacket final :
   void set_has_shoot_request();
   void set_has_login_request();
   void set_has_signup_request();
+  void set_has_leaderboard_request();
 
   inline bool has_payload() const;
   inline void clear_has_payload();
@@ -2845,6 +3391,7 @@ class ClientPacket final :
       ::multishoot::protocol::ShootRequest* shoot_request_;
       ::multishoot::protocol::LoginRequest* login_request_;
       ::multishoot::protocol::SignupRequest* signup_request_;
+      ::multishoot::protocol::LeaderboardRequest* leaderboard_request_;
     } payload_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     uint32_t _oneof_case_[1];
@@ -2909,6 +3456,7 @@ class ServerPacket final :
     kGameEndResponse = 8,
     kPlayerLeaveResponse = 9,
     kAuthResponse = 10,
+    kLeaderboardResponse = 11,
     PAYLOAD_NOT_SET = 0,
   };
 
@@ -2917,7 +3465,7 @@ class ServerPacket final :
                &_ServerPacket_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    19;
 
   friend void swap(ServerPacket& a, ServerPacket& b) {
     a.Swap(&b);
@@ -3000,6 +3548,7 @@ class ServerPacket final :
     kGameEndResponseFieldNumber = 8,
     kPlayerLeaveResponseFieldNumber = 9,
     kAuthResponseFieldNumber = 10,
+    kLeaderboardResponseFieldNumber = 11,
   };
   // .multishoot.protocol.LoginResponse login_response = 1;
   bool has_login_response() const;
@@ -3181,6 +3730,24 @@ class ServerPacket final :
       ::multishoot::protocol::AuthResponse* auth_response);
   ::multishoot::protocol::AuthResponse* unsafe_arena_release_auth_response();
 
+  // .multishoot.protocol.LeaderboardResponse leaderboard_response = 11;
+  bool has_leaderboard_response() const;
+  private:
+  bool _internal_has_leaderboard_response() const;
+  public:
+  void clear_leaderboard_response();
+  const ::multishoot::protocol::LeaderboardResponse& leaderboard_response() const;
+  PROTOBUF_NODISCARD ::multishoot::protocol::LeaderboardResponse* release_leaderboard_response();
+  ::multishoot::protocol::LeaderboardResponse* mutable_leaderboard_response();
+  void set_allocated_leaderboard_response(::multishoot::protocol::LeaderboardResponse* leaderboard_response);
+  private:
+  const ::multishoot::protocol::LeaderboardResponse& _internal_leaderboard_response() const;
+  ::multishoot::protocol::LeaderboardResponse* _internal_mutable_leaderboard_response();
+  public:
+  void unsafe_arena_set_allocated_leaderboard_response(
+      ::multishoot::protocol::LeaderboardResponse* leaderboard_response);
+  ::multishoot::protocol::LeaderboardResponse* unsafe_arena_release_leaderboard_response();
+
   void clear_payload();
   PayloadCase payload_case() const;
   // @@protoc_insertion_point(class_scope:multishoot.protocol.ServerPacket)
@@ -3196,6 +3763,7 @@ class ServerPacket final :
   void set_has_game_end_response();
   void set_has_player_leave_response();
   void set_has_auth_response();
+  void set_has_leaderboard_response();
 
   inline bool has_payload() const;
   inline void clear_has_payload();
@@ -3217,6 +3785,7 @@ class ServerPacket final :
       ::multishoot::protocol::GameEndResponse* game_end_response_;
       ::multishoot::protocol::PlayerLeaveResponse* player_leave_response_;
       ::multishoot::protocol::AuthResponse* auth_response_;
+      ::multishoot::protocol::LeaderboardResponse* leaderboard_response_;
     } payload_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     uint32_t _oneof_case_[1];
@@ -3580,6 +4149,228 @@ inline void SignupRequest::set_allocated_password(std::string* password) {
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:multishoot.protocol.SignupRequest.password)
+}
+
+// -------------------------------------------------------------------
+
+// LeaderboardRequest
+
+// uint32 page = 1;
+inline void LeaderboardRequest::clear_page() {
+  _impl_.page_ = 0u;
+}
+inline uint32_t LeaderboardRequest::_internal_page() const {
+  return _impl_.page_;
+}
+inline uint32_t LeaderboardRequest::page() const {
+  // @@protoc_insertion_point(field_get:multishoot.protocol.LeaderboardRequest.page)
+  return _internal_page();
+}
+inline void LeaderboardRequest::_internal_set_page(uint32_t value) {
+  
+  _impl_.page_ = value;
+}
+inline void LeaderboardRequest::set_page(uint32_t value) {
+  _internal_set_page(value);
+  // @@protoc_insertion_point(field_set:multishoot.protocol.LeaderboardRequest.page)
+}
+
+// -------------------------------------------------------------------
+
+// LeaderboardEntry
+
+// uint64 rank = 1;
+inline void LeaderboardEntry::clear_rank() {
+  _impl_.rank_ = uint64_t{0u};
+}
+inline uint64_t LeaderboardEntry::_internal_rank() const {
+  return _impl_.rank_;
+}
+inline uint64_t LeaderboardEntry::rank() const {
+  // @@protoc_insertion_point(field_get:multishoot.protocol.LeaderboardEntry.rank)
+  return _internal_rank();
+}
+inline void LeaderboardEntry::_internal_set_rank(uint64_t value) {
+  
+  _impl_.rank_ = value;
+}
+inline void LeaderboardEntry::set_rank(uint64_t value) {
+  _internal_set_rank(value);
+  // @@protoc_insertion_point(field_set:multishoot.protocol.LeaderboardEntry.rank)
+}
+
+// string username = 2;
+inline void LeaderboardEntry::clear_username() {
+  _impl_.username_.ClearToEmpty();
+}
+inline const std::string& LeaderboardEntry::username() const {
+  // @@protoc_insertion_point(field_get:multishoot.protocol.LeaderboardEntry.username)
+  return _internal_username();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void LeaderboardEntry::set_username(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.username_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:multishoot.protocol.LeaderboardEntry.username)
+}
+inline std::string* LeaderboardEntry::mutable_username() {
+  std::string* _s = _internal_mutable_username();
+  // @@protoc_insertion_point(field_mutable:multishoot.protocol.LeaderboardEntry.username)
+  return _s;
+}
+inline const std::string& LeaderboardEntry::_internal_username() const {
+  return _impl_.username_.Get();
+}
+inline void LeaderboardEntry::_internal_set_username(const std::string& value) {
+  
+  _impl_.username_.Set(value, GetArenaForAllocation());
+}
+inline std::string* LeaderboardEntry::_internal_mutable_username() {
+  
+  return _impl_.username_.Mutable(GetArenaForAllocation());
+}
+inline std::string* LeaderboardEntry::release_username() {
+  // @@protoc_insertion_point(field_release:multishoot.protocol.LeaderboardEntry.username)
+  return _impl_.username_.Release();
+}
+inline void LeaderboardEntry::set_allocated_username(std::string* username) {
+  if (username != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.username_.SetAllocated(username, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.username_.IsDefault()) {
+    _impl_.username_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:multishoot.protocol.LeaderboardEntry.username)
+}
+
+// uint32 score = 3;
+inline void LeaderboardEntry::clear_score() {
+  _impl_.score_ = 0u;
+}
+inline uint32_t LeaderboardEntry::_internal_score() const {
+  return _impl_.score_;
+}
+inline uint32_t LeaderboardEntry::score() const {
+  // @@protoc_insertion_point(field_get:multishoot.protocol.LeaderboardEntry.score)
+  return _internal_score();
+}
+inline void LeaderboardEntry::_internal_set_score(uint32_t value) {
+  
+  _impl_.score_ = value;
+}
+inline void LeaderboardEntry::set_score(uint32_t value) {
+  _internal_set_score(value);
+  // @@protoc_insertion_point(field_set:multishoot.protocol.LeaderboardEntry.score)
+}
+
+// -------------------------------------------------------------------
+
+// LeaderboardResponse
+
+// uint32 page = 1;
+inline void LeaderboardResponse::clear_page() {
+  _impl_.page_ = 0u;
+}
+inline uint32_t LeaderboardResponse::_internal_page() const {
+  return _impl_.page_;
+}
+inline uint32_t LeaderboardResponse::page() const {
+  // @@protoc_insertion_point(field_get:multishoot.protocol.LeaderboardResponse.page)
+  return _internal_page();
+}
+inline void LeaderboardResponse::_internal_set_page(uint32_t value) {
+  
+  _impl_.page_ = value;
+}
+inline void LeaderboardResponse::set_page(uint32_t value) {
+  _internal_set_page(value);
+  // @@protoc_insertion_point(field_set:multishoot.protocol.LeaderboardResponse.page)
+}
+
+// repeated .multishoot.protocol.LeaderboardEntry entries = 2;
+inline int LeaderboardResponse::_internal_entries_size() const {
+  return _impl_.entries_.size();
+}
+inline int LeaderboardResponse::entries_size() const {
+  return _internal_entries_size();
+}
+inline void LeaderboardResponse::clear_entries() {
+  _impl_.entries_.Clear();
+}
+inline ::multishoot::protocol::LeaderboardEntry* LeaderboardResponse::mutable_entries(int index) {
+  // @@protoc_insertion_point(field_mutable:multishoot.protocol.LeaderboardResponse.entries)
+  return _impl_.entries_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::multishoot::protocol::LeaderboardEntry >*
+LeaderboardResponse::mutable_entries() {
+  // @@protoc_insertion_point(field_mutable_list:multishoot.protocol.LeaderboardResponse.entries)
+  return &_impl_.entries_;
+}
+inline const ::multishoot::protocol::LeaderboardEntry& LeaderboardResponse::_internal_entries(int index) const {
+  return _impl_.entries_.Get(index);
+}
+inline const ::multishoot::protocol::LeaderboardEntry& LeaderboardResponse::entries(int index) const {
+  // @@protoc_insertion_point(field_get:multishoot.protocol.LeaderboardResponse.entries)
+  return _internal_entries(index);
+}
+inline ::multishoot::protocol::LeaderboardEntry* LeaderboardResponse::_internal_add_entries() {
+  return _impl_.entries_.Add();
+}
+inline ::multishoot::protocol::LeaderboardEntry* LeaderboardResponse::add_entries() {
+  ::multishoot::protocol::LeaderboardEntry* _add = _internal_add_entries();
+  // @@protoc_insertion_point(field_add:multishoot.protocol.LeaderboardResponse.entries)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::multishoot::protocol::LeaderboardEntry >&
+LeaderboardResponse::entries() const {
+  // @@protoc_insertion_point(field_list:multishoot.protocol.LeaderboardResponse.entries)
+  return _impl_.entries_;
+}
+
+// bool has_next_page = 3;
+inline void LeaderboardResponse::clear_has_next_page() {
+  _impl_.has_next_page_ = false;
+}
+inline bool LeaderboardResponse::_internal_has_next_page() const {
+  return _impl_.has_next_page_;
+}
+inline bool LeaderboardResponse::has_next_page() const {
+  // @@protoc_insertion_point(field_get:multishoot.protocol.LeaderboardResponse.has_next_page)
+  return _internal_has_next_page();
+}
+inline void LeaderboardResponse::_internal_set_has_next_page(bool value) {
+  
+  _impl_.has_next_page_ = value;
+}
+inline void LeaderboardResponse::set_has_next_page(bool value) {
+  _internal_set_has_next_page(value);
+  // @@protoc_insertion_point(field_set:multishoot.protocol.LeaderboardResponse.has_next_page)
+}
+
+// bool success = 4;
+inline void LeaderboardResponse::clear_success() {
+  _impl_.success_ = false;
+}
+inline bool LeaderboardResponse::_internal_success() const {
+  return _impl_.success_;
+}
+inline bool LeaderboardResponse::success() const {
+  // @@protoc_insertion_point(field_get:multishoot.protocol.LeaderboardResponse.success)
+  return _internal_success();
+}
+inline void LeaderboardResponse::_internal_set_success(bool value) {
+  
+  _impl_.success_ = value;
+}
+inline void LeaderboardResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:multishoot.protocol.LeaderboardResponse.success)
 }
 
 // -------------------------------------------------------------------
@@ -4822,6 +5613,80 @@ inline ::multishoot::protocol::SignupRequest* ClientPacket::mutable_signup_reque
   return _msg;
 }
 
+// .multishoot.protocol.LeaderboardRequest leaderboard_request = 5;
+inline bool ClientPacket::_internal_has_leaderboard_request() const {
+  return payload_case() == kLeaderboardRequest;
+}
+inline bool ClientPacket::has_leaderboard_request() const {
+  return _internal_has_leaderboard_request();
+}
+inline void ClientPacket::set_has_leaderboard_request() {
+  _impl_._oneof_case_[0] = kLeaderboardRequest;
+}
+inline void ClientPacket::clear_leaderboard_request() {
+  if (_internal_has_leaderboard_request()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete _impl_.payload_.leaderboard_request_;
+    }
+    clear_has_payload();
+  }
+}
+inline ::multishoot::protocol::LeaderboardRequest* ClientPacket::release_leaderboard_request() {
+  // @@protoc_insertion_point(field_release:multishoot.protocol.ClientPacket.leaderboard_request)
+  if (_internal_has_leaderboard_request()) {
+    clear_has_payload();
+    ::multishoot::protocol::LeaderboardRequest* temp = _impl_.payload_.leaderboard_request_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.payload_.leaderboard_request_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::multishoot::protocol::LeaderboardRequest& ClientPacket::_internal_leaderboard_request() const {
+  return _internal_has_leaderboard_request()
+      ? *_impl_.payload_.leaderboard_request_
+      : reinterpret_cast< ::multishoot::protocol::LeaderboardRequest&>(::multishoot::protocol::_LeaderboardRequest_default_instance_);
+}
+inline const ::multishoot::protocol::LeaderboardRequest& ClientPacket::leaderboard_request() const {
+  // @@protoc_insertion_point(field_get:multishoot.protocol.ClientPacket.leaderboard_request)
+  return _internal_leaderboard_request();
+}
+inline ::multishoot::protocol::LeaderboardRequest* ClientPacket::unsafe_arena_release_leaderboard_request() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:multishoot.protocol.ClientPacket.leaderboard_request)
+  if (_internal_has_leaderboard_request()) {
+    clear_has_payload();
+    ::multishoot::protocol::LeaderboardRequest* temp = _impl_.payload_.leaderboard_request_;
+    _impl_.payload_.leaderboard_request_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void ClientPacket::unsafe_arena_set_allocated_leaderboard_request(::multishoot::protocol::LeaderboardRequest* leaderboard_request) {
+  clear_payload();
+  if (leaderboard_request) {
+    set_has_leaderboard_request();
+    _impl_.payload_.leaderboard_request_ = leaderboard_request;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:multishoot.protocol.ClientPacket.leaderboard_request)
+}
+inline ::multishoot::protocol::LeaderboardRequest* ClientPacket::_internal_mutable_leaderboard_request() {
+  if (!_internal_has_leaderboard_request()) {
+    clear_payload();
+    set_has_leaderboard_request();
+    _impl_.payload_.leaderboard_request_ = CreateMaybeMessage< ::multishoot::protocol::LeaderboardRequest >(GetArenaForAllocation());
+  }
+  return _impl_.payload_.leaderboard_request_;
+}
+inline ::multishoot::protocol::LeaderboardRequest* ClientPacket::mutable_leaderboard_request() {
+  ::multishoot::protocol::LeaderboardRequest* _msg = _internal_mutable_leaderboard_request();
+  // @@protoc_insertion_point(field_mutable:multishoot.protocol.ClientPacket.leaderboard_request)
+  return _msg;
+}
+
 inline bool ClientPacket::has_payload() const {
   return payload_case() != PAYLOAD_NOT_SET;
 }
@@ -5575,6 +6440,80 @@ inline ::multishoot::protocol::AuthResponse* ServerPacket::mutable_auth_response
   return _msg;
 }
 
+// .multishoot.protocol.LeaderboardResponse leaderboard_response = 11;
+inline bool ServerPacket::_internal_has_leaderboard_response() const {
+  return payload_case() == kLeaderboardResponse;
+}
+inline bool ServerPacket::has_leaderboard_response() const {
+  return _internal_has_leaderboard_response();
+}
+inline void ServerPacket::set_has_leaderboard_response() {
+  _impl_._oneof_case_[0] = kLeaderboardResponse;
+}
+inline void ServerPacket::clear_leaderboard_response() {
+  if (_internal_has_leaderboard_response()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete _impl_.payload_.leaderboard_response_;
+    }
+    clear_has_payload();
+  }
+}
+inline ::multishoot::protocol::LeaderboardResponse* ServerPacket::release_leaderboard_response() {
+  // @@protoc_insertion_point(field_release:multishoot.protocol.ServerPacket.leaderboard_response)
+  if (_internal_has_leaderboard_response()) {
+    clear_has_payload();
+    ::multishoot::protocol::LeaderboardResponse* temp = _impl_.payload_.leaderboard_response_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.payload_.leaderboard_response_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::multishoot::protocol::LeaderboardResponse& ServerPacket::_internal_leaderboard_response() const {
+  return _internal_has_leaderboard_response()
+      ? *_impl_.payload_.leaderboard_response_
+      : reinterpret_cast< ::multishoot::protocol::LeaderboardResponse&>(::multishoot::protocol::_LeaderboardResponse_default_instance_);
+}
+inline const ::multishoot::protocol::LeaderboardResponse& ServerPacket::leaderboard_response() const {
+  // @@protoc_insertion_point(field_get:multishoot.protocol.ServerPacket.leaderboard_response)
+  return _internal_leaderboard_response();
+}
+inline ::multishoot::protocol::LeaderboardResponse* ServerPacket::unsafe_arena_release_leaderboard_response() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:multishoot.protocol.ServerPacket.leaderboard_response)
+  if (_internal_has_leaderboard_response()) {
+    clear_has_payload();
+    ::multishoot::protocol::LeaderboardResponse* temp = _impl_.payload_.leaderboard_response_;
+    _impl_.payload_.leaderboard_response_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void ServerPacket::unsafe_arena_set_allocated_leaderboard_response(::multishoot::protocol::LeaderboardResponse* leaderboard_response) {
+  clear_payload();
+  if (leaderboard_response) {
+    set_has_leaderboard_response();
+    _impl_.payload_.leaderboard_response_ = leaderboard_response;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:multishoot.protocol.ServerPacket.leaderboard_response)
+}
+inline ::multishoot::protocol::LeaderboardResponse* ServerPacket::_internal_mutable_leaderboard_response() {
+  if (!_internal_has_leaderboard_response()) {
+    clear_payload();
+    set_has_leaderboard_response();
+    _impl_.payload_.leaderboard_response_ = CreateMaybeMessage< ::multishoot::protocol::LeaderboardResponse >(GetArenaForAllocation());
+  }
+  return _impl_.payload_.leaderboard_response_;
+}
+inline ::multishoot::protocol::LeaderboardResponse* ServerPacket::mutable_leaderboard_response() {
+  ::multishoot::protocol::LeaderboardResponse* _msg = _internal_mutable_leaderboard_response();
+  // @@protoc_insertion_point(field_mutable:multishoot.protocol.ServerPacket.leaderboard_response)
+  return _msg;
+}
+
 inline bool ServerPacket::has_payload() const {
   return payload_case() != PAYLOAD_NOT_SET;
 }
@@ -5587,6 +6526,12 @@ inline ServerPacket::PayloadCase ServerPacket::payload_case() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

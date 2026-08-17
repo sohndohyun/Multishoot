@@ -11,6 +11,7 @@
 #include <string>
 #include <thread>
 #include <variant>
+#include <vector>
 
 struct database_config final {
     std::string host = "127.0.0.1";
@@ -41,7 +42,23 @@ struct database_score_completion final {
     bool success = false;
 };
 
-using database_completion = std::variant<database_auth_completion, database_score_completion>;
+struct database_leaderboard_entry final {
+    std::uint64_t rank = 0;
+    std::string username;
+    std::uint32_t score = 0;
+};
+
+struct database_leaderboard_completion final {
+    SOCKET socket = INVALID_SOCKET;
+    std::uint64_t connection_id = 0;
+    std::uint32_t page = 0;
+    std::vector<database_leaderboard_entry> entries;
+    bool has_next_page = false;
+    bool success = false;
+};
+
+using database_completion = std::variant<database_auth_completion, database_score_completion,
+                                         database_leaderboard_completion>;
 
 class database_worker final {
   public:
@@ -56,10 +73,11 @@ class database_worker final {
     bool submit_auth(SOCKET socket, std::uint64_t connection_id, std::string username,
                      std::string password, bool signup);
     bool submit_score(std::string username, std::uint32_t score);
+    bool submit_leaderboard(SOCKET socket, std::uint64_t connection_id, std::uint32_t page);
     bool try_receive(database_completion& completion);
 
   private:
-    enum class request_kind { auth, score };
+    enum class request_kind { auth, score, leaderboard };
 
     struct database_request final {
         request_kind kind = request_kind::auth;
@@ -68,6 +86,7 @@ class database_worker final {
         std::string username;
         std::string password;
         std::uint32_t score = 0;
+        std::uint32_t page = 0;
         bool signup = false;
     };
 

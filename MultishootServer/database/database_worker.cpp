@@ -254,6 +254,76 @@ class worker_database final {
         return true;
     }
 
+    bool fetch_leaderboard(std::uint32_t page,
+                           std::vector<database_leaderboard_entry>& entries,
+                           bool& has_next_page, bool& lost_connection) {
+        constexpr std::uint64_t page_size = 10;
+        lost_connection = false;
+        has_next_page = false;
+        entries.clear();
+
+        statement_ptr statement(mysql_stmt_init(connection_.get()));
+        if (!statement || !prepare(statement.get(),
+                                   "SELECT username, best_score FROM accounts "
+                                   "ORDER BY best_score DESC, username ASC LIMIT ? OFFSET ?",
+                                   lost_connection))
+            return false;
+
+        std::uint64_t limit = page_size + 1;
+        std::uint64_t offset = static_cast<std::uint64_t>(page) * page_size;
+        MYSQL_BIND parameters[2]{};
+        parameters[0].buffer_type = MYSQL_TYPE_LONGLONG;
+        parameters[0].buffer = &limit;
+        parameters[0].buffer_length = sizeof(limit);
+        parameters[0].is_unsigned = 1;
+        parameters[1].buffer_type = MYSQL_TYPE_LONGLONG;
+        parameters[1].buffer = &offset;
+        parameters[1].buffer_length = sizeof(offset);
+        parameters[1].is_unsigned = 1;
+        if (mysql_stmt_bind_param(statement.get(), parameters) != 0 ||
+            mysql_stmt_execute(statement.get()) != 0) {
+            lost_connection = connection_error(mysql_stmt_errno(statement.get()));
+            set_error(mysql_stmt_error(statement.get()));
+            return false;
+        }
+
+        char username[17]{};
+        unsigned long username_length = 0;
+        std::uint32_t score = 0;
+        MYSQL_BIND results[2]{};
+        results[0].buffer_type = MYSQL_TYPE_STRING;
+        results[0].buffer = username;
+        results[0].buffer_length = sizeof(username) - 1;
+        results[0].length = &username_length;
+        results[1].buffer_type = MYSQL_TYPE_LONG;
+        results[1].buffer = &score;
+        results[1].buffer_length = sizeof(score);
+        results[1].is_unsigned = 1;
+        if (mysql_stmt_bind_result(statement.get(), results) != 0 ||
+            mysql_stmt_store_result(statement.get()) != 0) {
+            lost_connection = connection_error(mysql_stmt_errno(statement.get()));
+            set_error(mysql_stmt_error(statement.get()));
+            return false;
+        }
+
+        for (;;) {
+            const auto fetch_result = mysql_stmt_fetch(statement.get());
+            if (fetch_result == MYSQL_NO_DATA)
+                break;
+            if (fetch_result != 0) {
+                lost_connection = connection_error(mysql_stmt_errno(statement.get()));
+                set_error(mysql_stmt_error(statement.get()));
+                return false;
+            }
+            entries.push_back({offset + entries.size() + 1,
+                               std::string(username, username_length), score});
+        }
+        has_next_page = entries.size() > page_size;
+        if (has_next_page)
+            entries.resize(page_size);
+        return true;
+    }
+
   private:
     bool validate_schema(std::string& error) {
         if (mysql_query(connection_.get(),
@@ -344,6 +414,16 @@ bool database_worker::submit_score(std::string username, std::uint32_t score) {
     return enqueue(std::move(request));
 }
 
+bool database_worker::submit_leaderboard(SOCKET socket, std::uint64_t connection_id,
+                                         std::uint32_t page) {
+    database_request request;
+    request.kind = request_kind::leaderboard;
+    request.socket = socket;
+    request.connection_id = connection_id;
+    request.page = page;
+    return enqueue(std::move(request));
+}
+
 bool database_worker::try_receive(database_completion& completion) {
     return completions_.try_receive(completion);
 }
@@ -368,13 +448,17 @@ void database_worker::run() {
         } pending_guard{pending_requests_};
 
         if (!database.ready() && !database.reconnect()) {
-            if (request.kind == request_kind::auth)
+            if (request.kind == request_kind::auth) {
                 static_cast<void>(completions_.emplace(database_auth_completion{
                     request.socket, request.connection_id, request.username,
                     database_auth_result::server_error, 0}));
-            else
+            } else if (request.kind == request_kind::score) {
                 static_cast<void>(completions_.emplace(
                     database_score_completion{request.username, request.score, false}));
+            } else {
+                static_cast<void>(completions_.emplace(database_leaderboard_completion{
+                    request.socket, request.connection_id, request.page}));
+            }
             continue;
         }
 
@@ -435,7 +519,7 @@ void database_worker::run() {
             }
             static_cast<void>(completions_.emplace(database_auth_completion{
                 request.socket, request.connection_id, request.username, result, best_score}));
-        } else {
+        } else if (request.kind == request_kind::score) {
             bool lost_connection = false;
             bool success = database.update_score(request.username, request.score, lost_connection);
             if (lost_connection && database.reconnect()) {
@@ -444,6 +528,20 @@ void database_worker::run() {
             }
             static_cast<void>(completions_.emplace(
                 database_score_completion{request.username, request.score, success}));
+        } else {
+            database_leaderboard_completion completion;
+            completion.socket = request.socket;
+            completion.connection_id = request.connection_id;
+            completion.page = request.page;
+            bool lost_connection = false;
+            completion.success = database.fetch_leaderboard(
+                request.page, completion.entries, completion.has_next_page, lost_connection);
+            if (lost_connection && database.reconnect()) {
+                bool ignored_loss = false;
+                completion.success = database.fetch_leaderboard(
+                    request.page, completion.entries, completion.has_next_page, ignored_loss);
+            }
+            static_cast<void>(completions_.emplace(std::move(completion)));
         }
     }
 }

@@ -38,6 +38,7 @@ class hello_world final : public scene {
 
   private:
     game_controller* controller_;
+    object* world_layer_ = nullptr;
 
     std::list<player*> player_list_;
     std::list<bullet*> bullet_list_;

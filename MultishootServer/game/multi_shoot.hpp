@@ -38,8 +38,12 @@ class multi_shoot final : public dr::server {
     void process_database_results();
     void handle_auth_completion(const database_auth_completion& completion);
     void handle_score_completion(const database_score_completion& completion);
+    void handle_leaderboard_completion(const database_leaderboard_completion& completion);
     void send_auth_response(SOCKET socket, multishoot::protocol::AuthResult result,
                             std::uint32_t best_score = 0);
+    void send_leaderboard_response(SOCKET socket, std::uint32_t page,
+                                   const std::vector<database_leaderboard_entry>& entries = {},
+                                   bool has_next_page = false, bool success = false);
     void flush_events();
     void send_packet(SOCKET socket, const multishoot::protocol::ServerPacket& packet);
 };

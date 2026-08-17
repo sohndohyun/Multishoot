@@ -151,11 +151,23 @@ foreach ($configuration in 'Debug', 'Release') {
 
 ## 화면
 
-![로비와 싱글 모드](./readmeResource/image_1.png)
+### 로비와 싱글플레이
 
-![멀티플레이](./readmeResource/image_2.png)
+![싱글 모드 로비와 싱글플레이](./readmeResource/image_1.png)
 
-![다수 클라이언트](./readmeResource/image_3.png)
+### 로그인과 회원가입
+
+![멀티플레이 로그인과 회원가입](./readmeResource/image_2.png)
+
+### 멀티플레이 진입과 리더보드
+
+![멀티 모드 로비와 리더보드](./readmeResource/image_3.png)
+
+### 2인 멀티플레이
+
+두 계정이 같은 서버에 접속한 상태이며, 양쪽 클라이언트에 동일한 두 플레이어와 게임 상태가 동기화됩니다.
+
+![두 클라이언트의 멀티플레이 동기화](./readmeResource/image_4.png)
 
 ## 프로토콜과 제약 사항
 

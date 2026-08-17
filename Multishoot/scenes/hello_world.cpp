@@ -35,9 +35,12 @@ hello_world::hello_world(std::unique_ptr<multi_shoot_client> client, std::uint32
 }
 
 void hello_world::start() {
+    world_layer_ = new object;
+    add_child(world_layer_);
+
     auto background = new game_object("background.bmp");
     background->set_scale(1.5f, 1.5f);
-    add_child(background);
+    background->set_parent(world_layer_);
 
     kill_count_ = 0;
     kill_count_text_ = new text("Plaguard-ZVnjx.ttf", 40);
@@ -182,7 +185,7 @@ void hello_world::spawn_enemy(Uint32 id, vector2 pos, Uint32 hp) {
     auto enemy = find_inactive_enemy();
     if (!enemy) {
         enemy = new ::enemy(id, pos, hp);
-        add_child(enemy);
+        enemy->set_parent(world_layer_);
         enemy_list_.push_back(enemy);
     } else {
         enemy->set_active(true);
@@ -194,7 +197,7 @@ void hello_world::spawn_bullet(Uint32 id, vector2 pos) {
     auto bullet = find_inactive_bullet();
     if (!bullet) {
         bullet = new ::bullet(id, pos);
-        add_child(bullet);
+        bullet->set_parent(world_layer_);
         bullet_list_.push_back(bullet);
     } else {
         bullet->set_active(true);
@@ -205,7 +208,7 @@ void hello_world::spawn_bullet(Uint32 id, vector2 pos) {
 void hello_world::spawn_player(Uint32 id, vector2 pos, Uint32 hp, vector2 dir) {
     auto player_object = new ::player(id, pos, hp);
     player_object->set_direction(dir);
-    add_child(player_object);
+    player_object->set_parent(world_layer_);
     player_list_.push_back(player_object);
 }
 

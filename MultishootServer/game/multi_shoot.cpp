@@ -62,6 +62,14 @@ void multi_shoot::on_receive(SOCKET socket, char* data, int size) {
             const auto& request = packet.signup_request();
             submit_authentication(socket, request.username(), request.password(), true);
         } break;
+        case multishoot::protocol::ClientPacket::kLeaderboardRequest: {
+            const auto connection = connection_ids_.find(socket);
+            if (connection == connection_ids_.end())
+                return;
+            const auto page = packet.leaderboard_request().page();
+            if (!database_.submit_leaderboard(socket, connection->second, page))
+                send_leaderboard_response(socket, page);
+        } break;
         default:
             break;
         }
@@ -138,8 +146,10 @@ void multi_shoot::process_database_results() {
                 using value_type = std::decay_t<decltype(value)>;
                 if constexpr (std::is_same_v<value_type, database_auth_completion>)
                     handle_auth_completion(value);
-                else
+                else if constexpr (std::is_same_v<value_type, database_score_completion>)
                     handle_score_completion(value);
+                else
+                    handle_leaderboard_completion(value);
             },
             completion);
     }
@@ -184,6 +194,15 @@ void multi_shoot::handle_score_completion(const database_score_completion& compl
         std::fprintf(stderr, "failed to persist score for %s\n", completion.username.c_str());
 }
 
+void multi_shoot::handle_leaderboard_completion(
+    const database_leaderboard_completion& completion) {
+    const auto connection = connection_ids_.find(completion.socket);
+    if (connection == connection_ids_.end() || connection->second != completion.connection_id)
+        return;
+    send_leaderboard_response(completion.socket, completion.page, completion.entries,
+                              completion.has_next_page, completion.success);
+}
+
 void multi_shoot::send_auth_response(SOCKET socket,
                                      multishoot::protocol::AuthResult result,
                                      std::uint32_t best_score) {
@@ -191,6 +210,23 @@ void multi_shoot::send_auth_response(SOCKET socket,
     auto* response = packet.mutable_auth_response();
     response->set_result(result);
     response->set_best_score(best_score);
+    send_packet(socket, packet);
+}
+
+void multi_shoot::send_leaderboard_response(
+    SOCKET socket, std::uint32_t page,
+    const std::vector<database_leaderboard_entry>& entries, bool has_next_page, bool success) {
+    multishoot::protocol::ServerPacket packet;
+    auto* response = packet.mutable_leaderboard_response();
+    response->set_page(page);
+    response->set_has_next_page(has_next_page);
+    response->set_success(success);
+    for (const auto& entry : entries) {
+        auto* item = response->add_entries();
+        item->set_rank(entry.rank);
+        item->set_username(entry.username);
+        item->set_score(entry.score);
+    }
     send_packet(socket, packet);
 }
 

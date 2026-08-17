@@ -23,6 +23,23 @@ message SignupRequest {
   string password = 2;
 }
 
+message LeaderboardRequest {
+  uint32 page = 1;
+}
+
+message LeaderboardEntry {
+  uint64 rank = 1;
+  string username = 2;
+  uint32 score = 3;
+}
+
+message LeaderboardResponse {
+  uint32 page = 1;
+  repeated LeaderboardEntry entries = 2;
+  bool has_next_page = 3;
+  bool success = 4;
+}
+
 enum AuthResult {
   AUTH_RESULT_UNSPECIFIED = 0;
   AUTH_RESULT_SUCCESS = 1;
@@ -93,6 +110,7 @@ message ClientPacket {
     ShootRequest shoot_request = 2;
     LoginRequest login_request = 3;
     SignupRequest signup_request = 4;
+    LeaderboardRequest leaderboard_request = 5;
   }
 }
 
@@ -108,5 +126,6 @@ message ServerPacket {
     GameEndResponse game_end_response = 8;
     PlayerLeaveResponse player_leave_response = 9;
     AuthResponse auth_response = 10;
+    LeaderboardResponse leaderboard_response = 11;
   }
 }
